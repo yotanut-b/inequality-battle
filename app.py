@@ -18,6 +18,14 @@ except ImportError:
     gspread = None
     ServiceAccountCredentials = None
 
+try:
+    import firebase_admin
+    from firebase_admin import credentials, firestore
+except ImportError:
+    firebase_admin = None
+    credentials = None
+    firestore = None
+
 
 APP_NAME = "Inequality Battle: ตะลุยโลกอสมการ"
 Q_DIR = "questions"
@@ -65,10 +73,32 @@ def get_max_level(topic):
     return max((int(level) for level in levels), default=1)
 
 
-def get_db_file():
+def get_room_id():
     room_id = st.session_state.get("room_id", "default")
     safe_room_id = "".join(char for char in room_id if char.isalnum() or char in "-_")
-    return f"game_state_{safe_room_id or 'default'}.json"
+    return safe_room_id or "default"
+
+
+def get_db_file():
+    return f"game_state_{get_room_id()}.json"
+
+
+@st.cache_resource
+def get_firestore_db():
+    if "firebase_service_account" not in st.secrets:
+        return None
+    if not firebase_admin:
+        st.error("ไม่พบแพ็กเกจ firebase-admin กรุณาติดตั้งจาก requirements.txt")
+        return None
+    try:
+        service_account = dict(st.secrets["firebase_service_account"])
+        service_account["private_key"] = service_account["private_key"].replace("\\n", "\n")
+        if not firebase_admin._apps:
+            firebase_admin.initialize_app(credentials.Certificate(service_account))
+        return firestore.client()
+    except Exception as error:
+        st.error(f"เชื่อมต่อ Firestore ไม่สำเร็จ: {error}")
+        return None
 
 
 def get_initial_state(topic=None):
@@ -100,6 +130,14 @@ def get_initial_state(topic=None):
 
 
 def get_db():
+    firestore_db = get_firestore_db()
+    if firestore_db:
+        snapshot = firestore_db.collection("rooms").document(get_room_id()).get()
+        if snapshot.exists:
+            return snapshot.to_dict()
+        state = get_initial_state()
+        update_db(state)
+        return state
     if not os.path.exists(get_db_file()):
         state = get_initial_state()
         update_db(state)
@@ -112,6 +150,10 @@ def get_db():
 
 
 def update_db(state):
+    firestore_db = get_firestore_db()
+    if firestore_db:
+        firestore_db.collection("rooms").document(get_room_id()).set(state)
+        return
     with open(get_db_file(), "w", encoding="utf-8") as file:
         json.dump(state, file, ensure_ascii=False, indent=2)
 
