@@ -305,6 +305,21 @@ def render_choice(choice, index):
         return st.button("เลือกคำตอบนี้", key=f"answer_{index}", use_container_width=True)
 
 
+@st.fragment(run_every=3)
+def render_waiting_panel(role, p1_name, p2_name):
+    latest_state = get_db()
+    if is_room_expired(latest_state):
+        close_expired_room()
+    if (
+        latest_state.get("turn") == role
+        or latest_state.get("winner")
+        or latest_state.get("game_id") != st.session_state.get("game_id")
+    ):
+        st.rerun()
+    waiting_name = p1_name if role == "Player 2" else p2_name
+    st.warning(f"รอ {waiting_name} เล่น")
+
+
 if "room_id" not in st.session_state:
     st.title(APP_NAME)
     if "home_notice" in st.session_state:
@@ -443,10 +458,8 @@ with board:
 
 with action:
     if state["turn"] != role:
-        waiting_name = p1_name if role == "Player 2" else p2_name
-        st.warning(f"รอ {waiting_name} เล่น")
-        time.sleep(3)
-        st.rerun()
+        render_waiting_panel(role, p1_name, p2_name)
+        st.stop()
 
     phase = state.get("game_phase", "READY")
     if phase == "READY":
