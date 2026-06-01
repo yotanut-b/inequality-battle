@@ -3,6 +3,7 @@ import json
 import os
 import random
 import time
+import uuid
 
 import streamlit as st
 
@@ -30,6 +31,7 @@ except ImportError:
 APP_NAME = "Inequality Battle: ตะลุยโลกอสมการ"
 Q_DIR = "questions"
 MYSTERY_SPOTS = [3, 11, 19, 27, 35, 43, 51, 59]
+ROOM_TIMEOUT_SECONDS = 3 * 60
 TOPICS = {
     "addition": "การแก้อสมการโดยใช้สมบัติการบวกของการไม่เท่ากัน",
     "multiplication": "การแก้อสมการโดยใช้สมบัติการคูณของการไม่เท่ากัน",
@@ -102,7 +104,11 @@ def get_firestore_db():
 
 
 def get_initial_state(topic=None):
+    now = time.time()
     return {
+        "game_id": uuid.uuid4().hex,
+        "created_at": now,
+        "last_activity_at": now,
         "topic": topic,
         "p1_pos": 0,
         "p2_pos": 0,
@@ -130,12 +136,30 @@ def get_initial_state(topic=None):
     }
 
 
+def ensure_room_metadata(state):
+    changed = False
+    now = time.time()
+    if "game_id" not in state:
+        state["game_id"] = uuid.uuid4().hex
+        changed = True
+    if "created_at" not in state:
+        state["created_at"] = now
+        changed = True
+    if "last_activity_at" not in state:
+        state["last_activity_at"] = now
+        changed = True
+    return changed
+
+
 def get_db():
     firestore_db = get_firestore_db()
     if firestore_db:
         snapshot = firestore_db.collection("rooms").document(get_room_id()).get()
         if snapshot.exists:
-            return snapshot.to_dict()
+            state = snapshot.to_dict()
+            if ensure_room_metadata(state):
+                update_db(state, touch=False)
+            return state
         state = get_initial_state()
         update_db(state)
         return state
@@ -145,18 +169,48 @@ def get_db():
         return state
     try:
         with open(get_db_file(), "r", encoding="utf-8") as file:
-            return json.load(file)
+            state = json.load(file)
+        if ensure_room_metadata(state):
+            update_db(state, touch=False)
+        return state
     except Exception:
         return get_initial_state()
 
 
-def update_db(state):
+def update_db(state, touch=True):
+    if touch:
+        state["last_activity_at"] = time.time()
     firestore_db = get_firestore_db()
     if firestore_db:
         firestore_db.collection("rooms").document(get_room_id()).set(state)
         return
     with open(get_db_file(), "w", encoding="utf-8") as file:
         json.dump(state, file, ensure_ascii=False, indent=2)
+
+
+def delete_db():
+    firestore_db = get_firestore_db()
+    if firestore_db:
+        firestore_db.collection("rooms").document(get_room_id()).delete()
+        return
+    if os.path.exists(get_db_file()):
+        os.remove(get_db_file())
+
+
+def is_room_expired(state):
+    return time.time() - state.get("last_activity_at", state.get("created_at", time.time())) >= ROOM_TIMEOUT_SECONDS
+
+
+def return_to_home(message):
+    for key in ["room_id", "player_name", "selected_topic", "my_role", "game_id"]:
+        st.session_state.pop(key, None)
+    st.session_state.home_notice = message
+    st.rerun()
+
+
+def close_expired_room():
+    delete_db()
+    return_to_home("ห้องถูกปิดแล้ว เนื่องจากไม่มีการเคลื่อนไหวเกิน 3 นาที กรุณาเข้าห้องใหม่")
 
 
 def reset_game(topic):
@@ -215,6 +269,8 @@ def render_choice(choice, index):
 
 if "room_id" not in st.session_state:
     st.title(APP_NAME)
+    if "home_notice" in st.session_state:
+        st.warning(st.session_state.pop("home_notice"))
     st.subheader("เลือกเนื้อหาก่อนเริ่มเกม")
     topic = st.radio(
         "เนื้อหา",
@@ -238,6 +294,10 @@ if "room_id" not in st.session_state:
 
 if "my_role" not in st.session_state:
     state = get_db()
+    if is_room_expired(state):
+        delete_db()
+        state = get_initial_state()
+        update_db(state)
     selected_topic = st.session_state.selected_topic
     st.header(f"ห้อง: {st.session_state.room_id}")
     if state.get("topic") and state["topic"] != selected_topic:
@@ -250,17 +310,23 @@ if "my_role" not in st.session_state:
         state["topic"] = selected_topic
         state["p1_name"] = st.session_state.player_name
         update_db(state)
+        st.session_state.game_id = state["game_id"]
         st.rerun()
     if col_2.button(f"เลือก Player 2 (ปัจจุบัน: {state.get('p2_name', 'ว่าง')})"):
         st.session_state.my_role = "Player 2"
         state["topic"] = selected_topic
         state["p2_name"] = st.session_state.player_name
         update_db(state)
+        st.session_state.game_id = state["game_id"]
         st.rerun()
     st.stop()
 
 
 state = get_db()
+if is_room_expired(state):
+    close_expired_room()
+if st.session_state.get("game_id") != state.get("game_id"):
+    return_to_home("ห้องรอบเดิมถูกปิดแล้ว กรุณาเข้าห้องใหม่")
 role = st.session_state.my_role
 topic = state["topic"]
 other_role = "Player 2" if role == "Player 1" else "Player 1"
