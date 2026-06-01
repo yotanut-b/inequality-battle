@@ -1,0 +1,2773 @@
+{
+  "title": "การแก้อสมการโดยใช้สมบัติการคูณของการไม่เท่ากัน",
+  "levels": {
+    "1": [
+      {
+        "text": "2x > -8",
+        "latex": "2x > -8",
+        "answer": "x > -4",
+        "choices": [
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-3x ≤ 12",
+        "latex": "-3x \\leq  12",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          },
+          {
+            "value": "x ≤ 4",
+            "latex": "x \\leq  4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          }
+        ]
+      },
+      {
+        "text": "x/(-4) < 3",
+        "latex": "\\frac{x}{(-4)} < 3",
+        "answer": "x > -12",
+        "choices": [
+          {
+            "value": "x < -12",
+            "latex": "x < -12"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x > -12",
+            "latex": "x > -12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          }
+        ]
+      },
+      {
+        "text": "x/5 ≥ -2",
+        "latex": "\\frac{x}{5} \\geq  -2",
+        "answer": "x ≥ -10",
+        "choices": [
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          },
+          {
+            "value": "x ≥ -10",
+            "latex": "x \\geq  -10"
+          }
+        ]
+      },
+      {
+        "text": "0.5x > 4",
+        "latex": "0.5x > 4",
+        "answer": "x > 8",
+        "choices": [
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x > 2",
+            "latex": "x > 2"
+          },
+          {
+            "value": "x < 2",
+            "latex": "x < 2"
+          }
+        ]
+      },
+      {
+        "text": "-(2/5)x ≥ 10",
+        "latex": "-(\\frac{2}{5})x \\geq  10",
+        "answer": "x ≤ -25",
+        "choices": [
+          {
+            "value": "x ≥ -25",
+            "latex": "x \\geq  -25"
+          },
+          {
+            "value": "x ≤ -25",
+            "latex": "x \\leq  -25"
+          },
+          {
+            "value": "x ≤ 25",
+            "latex": "x \\leq  25"
+          },
+          {
+            "value": "x ≥ 25",
+            "latex": "x \\geq  25"
+          }
+        ]
+      },
+      {
+        "text": "2x > -8",
+        "latex": "2x > -8",
+        "answer": "x > -4",
+        "choices": [
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-3x ≤ 12",
+        "latex": "-3x \\leq  12",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≤ 4",
+            "latex": "x \\leq  4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          }
+        ]
+      },
+      {
+        "text": "x/(-4) < 3",
+        "latex": "\\frac{x}{(-4)} < 3",
+        "answer": "x > -12",
+        "choices": [
+          {
+            "value": "x > -12",
+            "latex": "x > -12"
+          },
+          {
+            "value": "x < -12",
+            "latex": "x < -12"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          }
+        ]
+      },
+      {
+        "text": "x/5 ≥ -2",
+        "latex": "\\frac{x}{5} \\geq  -2",
+        "answer": "x ≥ -10",
+        "choices": [
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ -10",
+            "latex": "x \\geq  -10"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          }
+        ]
+      },
+      {
+        "text": "0.5x > 4",
+        "latex": "0.5x > 4",
+        "answer": "x > 8",
+        "choices": [
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x > 2",
+            "latex": "x > 2"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 2",
+            "latex": "x < 2"
+          }
+        ]
+      },
+      {
+        "text": "-(2/5)x ≥ 10",
+        "latex": "-(\\frac{2}{5})x \\geq  10",
+        "answer": "x ≤ -25",
+        "choices": [
+          {
+            "value": "x ≥ -25",
+            "latex": "x \\geq  -25"
+          },
+          {
+            "value": "x ≤ 25",
+            "latex": "x \\leq  25"
+          },
+          {
+            "value": "x ≥ 25",
+            "latex": "x \\geq  25"
+          },
+          {
+            "value": "x ≤ -25",
+            "latex": "x \\leq  -25"
+          }
+        ]
+      },
+      {
+        "text": "2x > -8",
+        "latex": "2x > -8",
+        "answer": "x > -4",
+        "choices": [
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-3x ≤ 12",
+        "latex": "-3x \\leq  12",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          },
+          {
+            "value": "x ≤ 4",
+            "latex": "x \\leq  4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          }
+        ]
+      },
+      {
+        "text": "x/(-4) < 3",
+        "latex": "\\frac{x}{(-4)} < 3",
+        "answer": "x > -12",
+        "choices": [
+          {
+            "value": "x < -12",
+            "latex": "x < -12"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x > -12",
+            "latex": "x > -12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          }
+        ]
+      },
+      {
+        "text": "x/5 ≥ -2",
+        "latex": "\\frac{x}{5} \\geq  -2",
+        "answer": "x ≥ -10",
+        "choices": [
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          },
+          {
+            "value": "x ≥ -10",
+            "latex": "x \\geq  -10"
+          }
+        ]
+      },
+      {
+        "text": "0.5x > 4",
+        "latex": "0.5x > 4",
+        "answer": "x > 8",
+        "choices": [
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x > 2",
+            "latex": "x > 2"
+          },
+          {
+            "value": "x < 2",
+            "latex": "x < 2"
+          }
+        ]
+      },
+      {
+        "text": "-(2/5)x ≥ 10",
+        "latex": "-(\\frac{2}{5})x \\geq  10",
+        "answer": "x ≤ -25",
+        "choices": [
+          {
+            "value": "x ≥ -25",
+            "latex": "x \\geq  -25"
+          },
+          {
+            "value": "x ≤ -25",
+            "latex": "x \\leq  -25"
+          },
+          {
+            "value": "x ≤ 25",
+            "latex": "x \\leq  25"
+          },
+          {
+            "value": "x ≥ 25",
+            "latex": "x \\geq  25"
+          }
+        ]
+      },
+      {
+        "text": "2x > -8",
+        "latex": "2x > -8",
+        "answer": "x > -4",
+        "choices": [
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-3x ≤ 12",
+        "latex": "-3x \\leq  12",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≤ 4",
+            "latex": "x \\leq  4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          }
+        ]
+      },
+      {
+        "text": "x/(-4) < 3",
+        "latex": "\\frac{x}{(-4)} < 3",
+        "answer": "x > -12",
+        "choices": [
+          {
+            "value": "x > -12",
+            "latex": "x > -12"
+          },
+          {
+            "value": "x < -12",
+            "latex": "x < -12"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          }
+        ]
+      },
+      {
+        "text": "x/5 ≥ -2",
+        "latex": "\\frac{x}{5} \\geq  -2",
+        "answer": "x ≥ -10",
+        "choices": [
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ -10",
+            "latex": "x \\geq  -10"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          }
+        ]
+      },
+      {
+        "text": "0.5x > 4",
+        "latex": "0.5x > 4",
+        "answer": "x > 8",
+        "choices": [
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x > 2",
+            "latex": "x > 2"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 2",
+            "latex": "x < 2"
+          }
+        ]
+      },
+      {
+        "text": "-(2/5)x ≥ 10",
+        "latex": "-(\\frac{2}{5})x \\geq  10",
+        "answer": "x ≤ -25",
+        "choices": [
+          {
+            "value": "x ≥ -25",
+            "latex": "x \\geq  -25"
+          },
+          {
+            "value": "x ≤ 25",
+            "latex": "x \\leq  25"
+          },
+          {
+            "value": "x ≥ 25",
+            "latex": "x \\geq  25"
+          },
+          {
+            "value": "x ≤ -25",
+            "latex": "x \\leq  -25"
+          }
+        ]
+      },
+      {
+        "text": "2x > -8",
+        "latex": "2x > -8",
+        "answer": "x > -4",
+        "choices": [
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-3x ≤ 12",
+        "latex": "-3x \\leq  12",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          },
+          {
+            "value": "x ≤ 4",
+            "latex": "x \\leq  4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          }
+        ]
+      },
+      {
+        "text": "x/(-4) < 3",
+        "latex": "\\frac{x}{(-4)} < 3",
+        "answer": "x > -12",
+        "choices": [
+          {
+            "value": "x < -12",
+            "latex": "x < -12"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x > -12",
+            "latex": "x > -12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          }
+        ]
+      },
+      {
+        "text": "x/5 ≥ -2",
+        "latex": "\\frac{x}{5} \\geq  -2",
+        "answer": "x ≥ -10",
+        "choices": [
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          },
+          {
+            "value": "x ≥ -10",
+            "latex": "x \\geq  -10"
+          }
+        ]
+      },
+      {
+        "text": "0.5x > 4",
+        "latex": "0.5x > 4",
+        "answer": "x > 8",
+        "choices": [
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x > 2",
+            "latex": "x > 2"
+          },
+          {
+            "value": "x < 2",
+            "latex": "x < 2"
+          }
+        ]
+      },
+      {
+        "text": "-(2/5)x ≥ 10",
+        "latex": "-(\\frac{2}{5})x \\geq  10",
+        "answer": "x ≤ -25",
+        "choices": [
+          {
+            "value": "x ≥ -25",
+            "latex": "x \\geq  -25"
+          },
+          {
+            "value": "x ≤ -25",
+            "latex": "x \\leq  -25"
+          },
+          {
+            "value": "x ≤ 25",
+            "latex": "x \\leq  25"
+          },
+          {
+            "value": "x ≥ 25",
+            "latex": "x \\geq  25"
+          }
+        ]
+      }
+    ],
+    "2": [
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      },
+      {
+        "text": "-0.2x > 1",
+        "latex": "-0.2x > 1",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "-(5/6)x ≤ -10",
+        "latex": "-(\\frac{5}{6})x \\leq  -10",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          }
+        ]
+      },
+      {
+        "text": "-1.25x < -5",
+        "latex": "-1.25x < -5",
+        "answer": "x > 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "(3/4)x ≥ -6",
+        "latex": "(\\frac{3}{4})x \\geq  -6",
+        "answer": "x ≥ -8",
+        "choices": [
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≥ -4.5",
+            "latex": "x \\geq  -4.5"
+          },
+          {
+            "value": "x ≤ -4.5",
+            "latex": "x \\leq  -4.5"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          }
+        ]
+      }
+    ],
+    "3": [
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x/2 - 4 < 8",
+        "latex": "\\frac{x}{2} - 4 < 8",
+        "answer": "x < 24",
+        "choices": [
+          {
+            "value": "x > 24",
+            "latex": "x > 24"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x < 24",
+            "latex": "x < 24"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          }
+        ]
+      },
+      {
+        "text": "-0.5x + 3 ≥ 7",
+        "latex": "-0.5x + 3 \\geq  7",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "2x + 6 > -10",
+        "latex": "2x + 6 > -10",
+        "answer": "x > -8",
+        "choices": [
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "-3x + 9 ≤ 0",
+        "latex": "-3x + 9 \\leq  0",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      }
+    ],
+    "4": [
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      },
+      {
+        "text": "0.5(x - 4) + 2 > 6",
+        "latex": "0.5(x - 4) + 2 > 6",
+        "answer": "x > 12",
+        "choices": [
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x < 12",
+            "latex": "x < 12"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      },
+      {
+        "text": "-(3/4)(x + 8) ≥ 3",
+        "latex": "-(\\frac{3}{4})(x + 8) \\geq  3",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "3(x - 2) > 12",
+        "latex": "3(x - 2) > 12",
+        "answer": "x > 6",
+        "choices": [
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "-2(x + 5) ≤ 8",
+        "latex": "-2(x + 5) \\leq  8",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          },
+          {
+            "value": "x ≤ 9",
+            "latex": "x \\leq  9"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          }
+        ]
+      }
+    ]
+  }
+}

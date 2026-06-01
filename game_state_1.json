@@ -1,0 +1,31 @@
+{
+  "topic": "linear",
+  "p1_pos": 0,
+  "p2_pos": 0,
+  "turn": "Player 1",
+  "game_phase": "READY",
+  "current_q": null,
+  "current_choices": [],
+  "p1_level": 1,
+  "p2_level": 1,
+  "last_roll": 0,
+  "old_pos": 0,
+  "ai_feedback": "",
+  "p1_items": {
+    "shield": 0,
+    "glass": 0
+  },
+  "p2_items": {
+    "shield": 0,
+    "glass": 0
+  },
+  "winner": null,
+  "p1_name": "Player 1",
+  "p2_name": "A",
+  "p1_saved": false,
+  "p2_saved": false,
+  "p1_history": [],
+  "p2_history": [],
+  "p1_reset_req": false,
+  "p2_reset_req": true
+}

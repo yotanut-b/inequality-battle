@@ -1,0 +1,2083 @@
+{
+  "title": "การแก้อสมการโดยใช้สมบัติการบวกของการไม่เท่ากัน",
+  "levels": {
+    "1": [
+      {
+        "text": "x + 5 ≤ -2",
+        "latex": "x + 5 \\leq  -2",
+        "answer": "x ≤ -7",
+        "choices": [
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ -7",
+            "latex": "x \\geq  -7"
+          },
+          {
+            "value": "x ≤ 7",
+            "latex": "x \\leq  7"
+          },
+          {
+            "value": "x ≤ -7",
+            "latex": "x \\leq  -7"
+          }
+        ]
+      },
+      {
+        "text": "x - 7 < -3",
+        "latex": "x - 7 < -3",
+        "answer": "x < 4",
+        "choices": [
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x < -10",
+            "latex": "x < -10"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "x + (-4) ≤ 0",
+        "latex": "x + (-4) \\leq  0",
+        "answer": "x ≤ 4",
+        "choices": [
+          {
+            "value": "x ≤ 4",
+            "latex": "x \\leq  4"
+          },
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          },
+          {
+            "value": "x ≤ 5",
+            "latex": "x \\leq  5"
+          }
+        ]
+      },
+      {
+        "text": "x - (-6) > -8",
+        "latex": "x - (-6) > -8",
+        "answer": "x > -14",
+        "choices": [
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -14",
+            "latex": "x < -14"
+          },
+          {
+            "value": "x > -14",
+            "latex": "x > -14"
+          },
+          {
+            "value": "x > 14",
+            "latex": "x > 14"
+          }
+        ]
+      },
+      {
+        "text": "x + 9 > 2",
+        "latex": "x + 9 > 2",
+        "answer": "x > -7",
+        "choices": [
+          {
+            "value": "x > 11",
+            "latex": "x > 11"
+          },
+          {
+            "value": "x > -7",
+            "latex": "x > -7"
+          },
+          {
+            "value": "x < -7",
+            "latex": "x < -7"
+          },
+          {
+            "value": "x > 7",
+            "latex": "x > 7"
+          }
+        ]
+      },
+      {
+        "text": "x - 3 > -10",
+        "latex": "x - 3 > -10",
+        "answer": "x > -7",
+        "choices": [
+          {
+            "value": "x > -13",
+            "latex": "x > -13"
+          },
+          {
+            "value": "x < -7",
+            "latex": "x < -7"
+          },
+          {
+            "value": "x > -7",
+            "latex": "x > -7"
+          },
+          {
+            "value": "x > 7",
+            "latex": "x > 7"
+          }
+        ]
+      },
+      {
+        "text": "x + (-8) ≥ -12",
+        "latex": "x + (-8) \\geq  -12",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≥ -20",
+            "latex": "x \\geq  -20"
+          },
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          }
+        ]
+      },
+      {
+        "text": "x - (-2) ≥ 5",
+        "latex": "x - (-2) \\geq  5",
+        "answer": "x ≥ 3",
+        "choices": [
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≥ 7",
+            "latex": "x \\geq  7"
+          },
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x + 6 ≥ -6",
+        "latex": "x + 6 \\geq  -6",
+        "answer": "x ≥ -12",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≥ 0",
+            "latex": "x \\geq  0"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          }
+        ]
+      },
+      {
+        "text": "x - 11 > 0",
+        "latex": "x - 11 > 0",
+        "answer": "x > 11",
+        "choices": [
+          {
+            "value": "x > -11",
+            "latex": "x > -11"
+          },
+          {
+            "value": "x < 11",
+            "latex": "x < 11"
+          },
+          {
+            "value": "x > 12",
+            "latex": "x > 12"
+          },
+          {
+            "value": "x > 11",
+            "latex": "x > 11"
+          }
+        ]
+      },
+      {
+        "text": "x + (-5) ≥ 7",
+        "latex": "x + (-5) \\geq  7",
+        "answer": "x ≥ 12",
+        "choices": [
+          {
+            "value": "x ≥ 12",
+            "latex": "x \\geq  12"
+          },
+          {
+            "value": "x ≥ 2",
+            "latex": "x \\geq  2"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          }
+        ]
+      },
+      {
+        "text": "x - (-9) ≤ -4",
+        "latex": "x - (-9) \\leq  -4",
+        "answer": "x ≤ -13",
+        "choices": [
+          {
+            "value": "x ≤ 5",
+            "latex": "x \\leq  5"
+          },
+          {
+            "value": "x ≥ -13",
+            "latex": "x \\geq  -13"
+          },
+          {
+            "value": "x ≤ 13",
+            "latex": "x \\leq  13"
+          },
+          {
+            "value": "x ≤ -13",
+            "latex": "x \\leq  -13"
+          }
+        ]
+      },
+      {
+        "text": "x + 2 ≤ -9",
+        "latex": "x + 2 \\leq  -9",
+        "answer": "x ≤ -11",
+        "choices": [
+          {
+            "value": "x ≤ -7",
+            "latex": "x \\leq  -7"
+          },
+          {
+            "value": "x ≥ -11",
+            "latex": "x \\geq  -11"
+          },
+          {
+            "value": "x ≤ 11",
+            "latex": "x \\leq  11"
+          },
+          {
+            "value": "x ≤ -11",
+            "latex": "x \\leq  -11"
+          }
+        ]
+      },
+      {
+        "text": "x - 8 ≥ -15",
+        "latex": "x - 8 \\geq  -15",
+        "answer": "x ≥ -7",
+        "choices": [
+          {
+            "value": "x ≥ -23",
+            "latex": "x \\geq  -23"
+          },
+          {
+            "value": "x ≥ -7",
+            "latex": "x \\geq  -7"
+          },
+          {
+            "value": "x ≤ -7",
+            "latex": "x \\leq  -7"
+          },
+          {
+            "value": "x ≥ 7",
+            "latex": "x \\geq  7"
+          }
+        ]
+      },
+      {
+        "text": "x + (-3) ≤ 4",
+        "latex": "x + (-3) \\leq  4",
+        "answer": "x ≤ 7",
+        "choices": [
+          {
+            "value": "x ≤ 1",
+            "latex": "x \\leq  1"
+          },
+          {
+            "value": "x ≥ 7",
+            "latex": "x \\geq  7"
+          },
+          {
+            "value": "x ≤ 7",
+            "latex": "x \\leq  7"
+          },
+          {
+            "value": "x ≤ -7",
+            "latex": "x \\leq  -7"
+          }
+        ]
+      },
+      {
+        "text": "x - (-4) > 0",
+        "latex": "x - (-4) > 0",
+        "answer": "x > -4",
+        "choices": [
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x > -3",
+            "latex": "x > -3"
+          }
+        ]
+      },
+      {
+        "text": "x + 12 ≥ -1",
+        "latex": "x + 12 \\geq  -1",
+        "answer": "x ≥ -13",
+        "choices": [
+          {
+            "value": "x ≥ 11",
+            "latex": "x \\geq  11"
+          },
+          {
+            "value": "x ≤ -13",
+            "latex": "x \\leq  -13"
+          },
+          {
+            "value": "x ≥ 13",
+            "latex": "x \\geq  13"
+          },
+          {
+            "value": "x ≥ -13",
+            "latex": "x \\geq  -13"
+          }
+        ]
+      },
+      {
+        "text": "x - 5 > 9",
+        "latex": "x - 5 > 9",
+        "answer": "x > 14",
+        "choices": [
+          {
+            "value": "x > 14",
+            "latex": "x > 14"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < 14",
+            "latex": "x < 14"
+          },
+          {
+            "value": "x > -14",
+            "latex": "x > -14"
+          }
+        ]
+      },
+      {
+        "text": "x + (-7) > -2",
+        "latex": "x + (-7) > -2",
+        "answer": "x > 5",
+        "choices": [
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          },
+          {
+            "value": "x > -9",
+            "latex": "x > -9"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          }
+        ]
+      },
+      {
+        "text": "x - (-1) ≤ -11",
+        "latex": "x - (-1) \\leq  -11",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          }
+        ]
+      },
+      {
+        "text": "x + 0 ≥ -5",
+        "latex": "x + 0 \\geq  -5",
+        "answer": "x ≥ -5",
+        "choices": [
+          {
+            "value": "x ≥ -5",
+            "latex": "x \\geq  -5"
+          },
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          },
+          {
+            "value": "x ≤ -5",
+            "latex": "x \\leq  -5"
+          },
+          {
+            "value": "x ≥ 5",
+            "latex": "x \\geq  5"
+          }
+        ]
+      },
+      {
+        "text": "x - 0 < 6",
+        "latex": "x - 0 < 6",
+        "answer": "x < 6",
+        "choices": [
+          {
+            "value": "x < 7",
+            "latex": "x < 7"
+          },
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          },
+          {
+            "value": "x < -6",
+            "latex": "x < -6"
+          }
+        ]
+      },
+      {
+        "text": "x + (-10) < 0",
+        "latex": "x + (-10) < 0",
+        "answer": "x < 10",
+        "choices": [
+          {
+            "value": "x < 10",
+            "latex": "x < 10"
+          },
+          {
+            "value": "x < -10",
+            "latex": "x < -10"
+          },
+          {
+            "value": "x > 10",
+            "latex": "x > 10"
+          },
+          {
+            "value": "x < 11",
+            "latex": "x < 11"
+          }
+        ]
+      },
+      {
+        "text": "x - 6 > -6",
+        "latex": "x - 6 > -6",
+        "answer": "x > 0",
+        "choices": [
+          {
+            "value": "x > -12",
+            "latex": "x > -12"
+          },
+          {
+            "value": "x < 0",
+            "latex": "x < 0"
+          },
+          {
+            "value": "x > 1",
+            "latex": "x > 1"
+          },
+          {
+            "value": "x > 0",
+            "latex": "x > 0"
+          }
+        ]
+      },
+      {
+        "text": "x - (-8) < 3",
+        "latex": "x - (-8) < 3",
+        "answer": "x < -5",
+        "choices": [
+          {
+            "value": "x < 11",
+            "latex": "x < 11"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          }
+        ]
+      }
+    ],
+    "2": [
+      {
+        "text": "x + 8 - 3 ≤ -7",
+        "latex": "x + 8 - 3 \\leq  -7",
+        "answer": "x ≤ -12",
+        "choices": [
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          },
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ 12",
+            "latex": "x \\leq  12"
+          }
+        ]
+      },
+      {
+        "text": "x - 5 + 2 ≥ -4",
+        "latex": "x - 5 + 2 \\geq  -4",
+        "answer": "x ≥ -1",
+        "choices": [
+          {
+            "value": "x ≥ -1",
+            "latex": "x \\geq  -1"
+          },
+          {
+            "value": "x ≥ -7",
+            "latex": "x \\geq  -7"
+          },
+          {
+            "value": "x ≤ -1",
+            "latex": "x \\leq  -1"
+          },
+          {
+            "value": "x ≥ 1",
+            "latex": "x \\geq  1"
+          }
+        ]
+      },
+      {
+        "text": "x + (-6) - 4 < -9",
+        "latex": "x + (-6) - 4 < -9",
+        "answer": "x < 1",
+        "choices": [
+          {
+            "value": "x < -19",
+            "latex": "x < -19"
+          },
+          {
+            "value": "x < 1",
+            "latex": "x < 1"
+          },
+          {
+            "value": "x > 1",
+            "latex": "x > 1"
+          },
+          {
+            "value": "x < -1",
+            "latex": "x < -1"
+          }
+        ]
+      },
+      {
+        "text": "x - 9 + 12 ≥ 0",
+        "latex": "x - 9 + 12 \\geq  0",
+        "answer": "x ≥ -3",
+        "choices": [
+          {
+            "value": "x ≥ 3",
+            "latex": "x \\geq  3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x + 7 + (-10) > 5",
+        "latex": "x + 7 + (-10) > 5",
+        "answer": "x > 8",
+        "choices": [
+          {
+            "value": "x > 2",
+            "latex": "x > 2"
+          },
+          {
+            "value": "x > 8",
+            "latex": "x > 8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          }
+        ]
+      },
+      {
+        "text": "x - (-4) - 6 < -8",
+        "latex": "x - (-4) - 6 < -8",
+        "answer": "x < -6",
+        "choices": [
+          {
+            "value": "x < -10",
+            "latex": "x < -10"
+          },
+          {
+            "value": "x < -6",
+            "latex": "x < -6"
+          },
+          {
+            "value": "x > -6",
+            "latex": "x > -6"
+          },
+          {
+            "value": "x < 6",
+            "latex": "x < 6"
+          }
+        ]
+      },
+      {
+        "text": "x + 3 - 11 ≤ -2",
+        "latex": "x + 3 - 11 \\leq  -2",
+        "answer": "x ≤ 6",
+        "choices": [
+          {
+            "value": "x ≤ 6",
+            "latex": "x \\leq  6"
+          },
+          {
+            "value": "x ≤ -10",
+            "latex": "x \\leq  -10"
+          },
+          {
+            "value": "x ≥ 6",
+            "latex": "x \\geq  6"
+          },
+          {
+            "value": "x ≤ -6",
+            "latex": "x \\leq  -6"
+          }
+        ]
+      },
+      {
+        "text": "x - 8 + (-5) ≥ -15",
+        "latex": "x - 8 + (-5) \\geq  -15",
+        "answer": "x ≥ -2",
+        "choices": [
+          {
+            "value": "x ≥ -28",
+            "latex": "x \\geq  -28"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≥ 2",
+            "latex": "x \\geq  2"
+          }
+        ]
+      },
+      {
+        "text": "x + (-2) + 9 > -3",
+        "latex": "x + (-2) + 9 > -3",
+        "answer": "x > -10",
+        "choices": [
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x > -10",
+            "latex": "x > -10"
+          },
+          {
+            "value": "x < -10",
+            "latex": "x < -10"
+          },
+          {
+            "value": "x > 10",
+            "latex": "x > 10"
+          }
+        ]
+      },
+      {
+        "text": "x - 4 + 4 ≥ -6",
+        "latex": "x - 4 + 4 \\geq  -6",
+        "answer": "x ≥ -6",
+        "choices": [
+          {
+            "value": "x ≥ -5",
+            "latex": "x \\geq  -5"
+          },
+          {
+            "value": "x ≤ -6",
+            "latex": "x \\leq  -6"
+          },
+          {
+            "value": "x ≥ -6",
+            "latex": "x \\geq  -6"
+          },
+          {
+            "value": "x ≥ 6",
+            "latex": "x \\geq  6"
+          }
+        ]
+      },
+      {
+        "text": "x + 10 - 16 ≤ 1",
+        "latex": "x + 10 - 16 \\leq  1",
+        "answer": "x ≤ 7",
+        "choices": [
+          {
+            "value": "x ≤ -5",
+            "latex": "x \\leq  -5"
+          },
+          {
+            "value": "x ≥ 7",
+            "latex": "x \\geq  7"
+          },
+          {
+            "value": "x ≤ 7",
+            "latex": "x \\leq  7"
+          },
+          {
+            "value": "x ≤ -7",
+            "latex": "x \\leq  -7"
+          }
+        ]
+      },
+      {
+        "text": "x - (-7) + (-9) ≤ 3",
+        "latex": "x - (-7) + (-9) \\leq  3",
+        "answer": "x ≤ 5",
+        "choices": [
+          {
+            "value": "x ≤ 5",
+            "latex": "x \\leq  5"
+          },
+          {
+            "value": "x ≤ 1",
+            "latex": "x \\leq  1"
+          },
+          {
+            "value": "x ≥ 5",
+            "latex": "x \\geq  5"
+          },
+          {
+            "value": "x ≤ -5",
+            "latex": "x \\leq  -5"
+          }
+        ]
+      },
+      {
+        "text": "x + 5 + (-12) < 0",
+        "latex": "x + 5 + (-12) < 0",
+        "answer": "x < 7",
+        "choices": [
+          {
+            "value": "x < -7",
+            "latex": "x < -7"
+          },
+          {
+            "value": "x > 7",
+            "latex": "x > 7"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          },
+          {
+            "value": "x < 7",
+            "latex": "x < 7"
+          }
+        ]
+      },
+      {
+        "text": "x - 6 + 1 > -11",
+        "latex": "x - 6 + 1 > -11",
+        "answer": "x > -6",
+        "choices": [
+          {
+            "value": "x > -16",
+            "latex": "x > -16"
+          },
+          {
+            "value": "x < -6",
+            "latex": "x < -6"
+          },
+          {
+            "value": "x > -6",
+            "latex": "x > -6"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          }
+        ]
+      },
+      {
+        "text": "x + (-9) + 4 < -1",
+        "latex": "x + (-9) + 4 < -1",
+        "answer": "x < 4",
+        "choices": [
+          {
+            "value": "x < -6",
+            "latex": "x < -6"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          }
+        ]
+      },
+      {
+        "text": "x - (-3) - 8 < 6",
+        "latex": "x - (-3) - 8 < 6",
+        "answer": "x < 11",
+        "choices": [
+          {
+            "value": "x < 1",
+            "latex": "x < 1"
+          },
+          {
+            "value": "x < 11",
+            "latex": "x < 11"
+          },
+          {
+            "value": "x > 11",
+            "latex": "x > 11"
+          },
+          {
+            "value": "x < -11",
+            "latex": "x < -11"
+          }
+        ]
+      },
+      {
+        "text": "x + 11 - 2 > -5",
+        "latex": "x + 11 - 2 > -5",
+        "answer": "x > -14",
+        "choices": [
+          {
+            "value": "x > -14",
+            "latex": "x > -14"
+          },
+          {
+            "value": "x > 4",
+            "latex": "x > 4"
+          },
+          {
+            "value": "x < -14",
+            "latex": "x < -14"
+          },
+          {
+            "value": "x > 14",
+            "latex": "x > 14"
+          }
+        ]
+      },
+      {
+        "text": "x - 10 + 7 ≤ -9",
+        "latex": "x - 10 + 7 \\leq  -9",
+        "answer": "x ≤ -6",
+        "choices": [
+          {
+            "value": "x ≤ -12",
+            "latex": "x \\leq  -12"
+          },
+          {
+            "value": "x ≥ -6",
+            "latex": "x \\geq  -6"
+          },
+          {
+            "value": "x ≤ 6",
+            "latex": "x \\leq  6"
+          },
+          {
+            "value": "x ≤ -6",
+            "latex": "x \\leq  -6"
+          }
+        ]
+      },
+      {
+        "text": "x + (-4) - (-6) < 0",
+        "latex": "x + (-4) - (-6) < 0",
+        "answer": "x < -2",
+        "choices": [
+          {
+            "value": "x < 2",
+            "latex": "x < 2"
+          },
+          {
+            "value": "x > -2",
+            "latex": "x > -2"
+          },
+          {
+            "value": "x < -1",
+            "latex": "x < -1"
+          },
+          {
+            "value": "x < -2",
+            "latex": "x < -2"
+          }
+        ]
+      },
+      {
+        "text": "x - 2 + (-7) ≤ -12",
+        "latex": "x - 2 + (-7) \\leq  -12",
+        "answer": "x ≤ -3",
+        "choices": [
+          {
+            "value": "x ≤ -21",
+            "latex": "x \\leq  -21"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          },
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          }
+        ]
+      },
+      {
+        "text": "x + 6 - 15 < 4",
+        "latex": "x + 6 - 15 < 4",
+        "answer": "x < 13",
+        "choices": [
+          {
+            "value": "x < 13",
+            "latex": "x < 13"
+          },
+          {
+            "value": "x < -5",
+            "latex": "x < -5"
+          },
+          {
+            "value": "x > 13",
+            "latex": "x > 13"
+          },
+          {
+            "value": "x < -13",
+            "latex": "x < -13"
+          }
+        ]
+      },
+      {
+        "text": "x - (-8) + (-3) ≤ -10",
+        "latex": "x - (-8) + (-3) \\leq  -10",
+        "answer": "x ≤ -15",
+        "choices": [
+          {
+            "value": "x ≤ -5",
+            "latex": "x \\leq  -5"
+          },
+          {
+            "value": "x ≥ -15",
+            "latex": "x \\geq  -15"
+          },
+          {
+            "value": "x ≤ -15",
+            "latex": "x \\leq  -15"
+          },
+          {
+            "value": "x ≤ 15",
+            "latex": "x \\leq  15"
+          }
+        ]
+      },
+      {
+        "text": "x + (-1) - 5 ≥ -6",
+        "latex": "x + (-1) - 5 \\geq  -6",
+        "answer": "x ≥ 0",
+        "choices": [
+          {
+            "value": "x ≥ -12",
+            "latex": "x \\geq  -12"
+          },
+          {
+            "value": "x ≤ 0",
+            "latex": "x \\leq  0"
+          },
+          {
+            "value": "x ≥ 1",
+            "latex": "x \\geq  1"
+          },
+          {
+            "value": "x ≥ 0",
+            "latex": "x \\geq  0"
+          }
+        ]
+      },
+      {
+        "text": "x - 12 + 9 > 2",
+        "latex": "x - 12 + 9 > 2",
+        "answer": "x > 5",
+        "choices": [
+          {
+            "value": "x > -1",
+            "latex": "x > -1"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          }
+        ]
+      },
+      {
+        "text": "x + 4 + (-4) < -8",
+        "latex": "x + 4 + (-4) < -8",
+        "answer": "x < -8",
+        "choices": [
+          {
+            "value": "x < -8",
+            "latex": "x < -8"
+          },
+          {
+            "value": "x < -7",
+            "latex": "x < -7"
+          },
+          {
+            "value": "x > -8",
+            "latex": "x > -8"
+          },
+          {
+            "value": "x < 8",
+            "latex": "x < 8"
+          }
+        ]
+      }
+    ],
+    "3": [
+      {
+        "text": "(x + 5) - 3 ≤ -6",
+        "latex": "(x + 5) - 3 \\leq  -6",
+        "answer": "x ≤ -8",
+        "choices": [
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ -8",
+            "latex": "x \\geq  -8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          }
+        ]
+      },
+      {
+        "text": "(x - 4) + 7 < 2",
+        "latex": "(x - 4) + 7 < 2",
+        "answer": "x < -1",
+        "choices": [
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > -1",
+            "latex": "x > -1"
+          },
+          {
+            "value": "x < -1",
+            "latex": "x < -1"
+          },
+          {
+            "value": "x < 1",
+            "latex": "x < 1"
+          }
+        ]
+      },
+      {
+        "text": "x - (5 - 2) > -3",
+        "latex": "x - (5 - 2) > -3",
+        "answer": "x > 0",
+        "choices": [
+          {
+            "value": "x > -6",
+            "latex": "x > -6"
+          },
+          {
+            "value": "x > 0",
+            "latex": "x > 0"
+          },
+          {
+            "value": "x < 0",
+            "latex": "x < 0"
+          },
+          {
+            "value": "x > 1",
+            "latex": "x > 1"
+          }
+        ]
+      },
+      {
+        "text": "x - (4 - 7) ≥ -2",
+        "latex": "x - (4 - 7) \\geq  -2",
+        "answer": "x ≥ -5",
+        "choices": [
+          {
+            "value": "x ≥ 1",
+            "latex": "x \\geq  1"
+          },
+          {
+            "value": "x ≤ -5",
+            "latex": "x \\leq  -5"
+          },
+          {
+            "value": "x ≥ 5",
+            "latex": "x \\geq  5"
+          },
+          {
+            "value": "x ≥ -5",
+            "latex": "x \\geq  -5"
+          }
+        ]
+      },
+      {
+        "text": "x - (-3 + 1) ≥ 0",
+        "latex": "x - (-3 + 1) \\geq  0",
+        "answer": "x ≥ -2",
+        "choices": [
+          {
+            "value": "x ≥ 2",
+            "latex": "x \\geq  2"
+          },
+          {
+            "value": "x ≥ -2",
+            "latex": "x \\geq  -2"
+          },
+          {
+            "value": "x ≤ -2",
+            "latex": "x \\leq  -2"
+          },
+          {
+            "value": "x ≥ -1",
+            "latex": "x \\geq  -1"
+          }
+        ]
+      },
+      {
+        "text": "(x + (-6)) + 4 > -8",
+        "latex": "(x + (-6)) + 4 > -8",
+        "answer": "x > -6",
+        "choices": [
+          {
+            "value": "x > -10",
+            "latex": "x > -10"
+          },
+          {
+            "value": "x < -6",
+            "latex": "x < -6"
+          },
+          {
+            "value": "x > -6",
+            "latex": "x > -6"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          }
+        ]
+      },
+      {
+        "text": "(x - 9) + 2 ≤ -10",
+        "latex": "(x - 9) + 2 \\leq  -10",
+        "answer": "x ≤ -3",
+        "choices": [
+          {
+            "value": "x ≤ -3",
+            "latex": "x \\leq  -3"
+          },
+          {
+            "value": "x ≤ -17",
+            "latex": "x \\leq  -17"
+          },
+          {
+            "value": "x ≥ -3",
+            "latex": "x \\geq  -3"
+          },
+          {
+            "value": "x ≤ 3",
+            "latex": "x \\leq  3"
+          }
+        ]
+      },
+      {
+        "text": "x - (-5 - 3) ≥ -1",
+        "latex": "x - (-5 - 3) \\geq  -1",
+        "answer": "x ≥ -9",
+        "choices": [
+          {
+            "value": "x ≥ 7",
+            "latex": "x \\geq  7"
+          },
+          {
+            "value": "x ≥ -9",
+            "latex": "x \\geq  -9"
+          },
+          {
+            "value": "x ≤ -9",
+            "latex": "x \\leq  -9"
+          },
+          {
+            "value": "x ≥ 9",
+            "latex": "x \\geq  9"
+          }
+        ]
+      },
+      {
+        "text": "(x + 8) - 11 ≤ 5",
+        "latex": "(x + 8) - 11 \\leq  5",
+        "answer": "x ≤ 8",
+        "choices": [
+          {
+            "value": "x ≤ 2",
+            "latex": "x \\leq  2"
+          },
+          {
+            "value": "x ≥ 8",
+            "latex": "x \\geq  8"
+          },
+          {
+            "value": "x ≤ 8",
+            "latex": "x \\leq  8"
+          },
+          {
+            "value": "x ≤ -8",
+            "latex": "x \\leq  -8"
+          }
+        ]
+      },
+      {
+        "text": "x - (6 + (-10)) > -7",
+        "latex": "x - (6 + (-10)) > -7",
+        "answer": "x > -11",
+        "choices": [
+          {
+            "value": "x > -3",
+            "latex": "x > -3"
+          },
+          {
+            "value": "x < -11",
+            "latex": "x < -11"
+          },
+          {
+            "value": "x > -11",
+            "latex": "x > -11"
+          },
+          {
+            "value": "x > 11",
+            "latex": "x > 11"
+          }
+        ]
+      },
+      {
+        "text": "(x - (-4)) - 9 > 0",
+        "latex": "(x - (-4)) - 9 > 0",
+        "answer": "x > 5",
+        "choices": [
+          {
+            "value": "x > -5",
+            "latex": "x > -5"
+          },
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x > 5",
+            "latex": "x > 5"
+          },
+          {
+            "value": "x > 6",
+            "latex": "x > 6"
+          }
+        ]
+      },
+      {
+        "text": "x - (-2 + 7) ≤ -12",
+        "latex": "x - (-2 + 7) \\leq  -12",
+        "answer": "x ≤ -7",
+        "choices": [
+          {
+            "value": "x ≤ -17",
+            "latex": "x \\leq  -17"
+          },
+          {
+            "value": "x ≥ -7",
+            "latex": "x \\geq  -7"
+          },
+          {
+            "value": "x ≤ 7",
+            "latex": "x \\leq  7"
+          },
+          {
+            "value": "x ≤ -7",
+            "latex": "x \\leq  -7"
+          }
+        ]
+      },
+      {
+        "text": "(x + 3) + (-8) > -2",
+        "latex": "(x + 3) + (-8) > -2",
+        "answer": "x > 3",
+        "choices": [
+          {
+            "value": "x > -7",
+            "latex": "x > -7"
+          },
+          {
+            "value": "x < 3",
+            "latex": "x < 3"
+          },
+          {
+            "value": "x > -3",
+            "latex": "x > -3"
+          },
+          {
+            "value": "x > 3",
+            "latex": "x > 3"
+          }
+        ]
+      },
+      {
+        "text": "x - (9 - 12) ≤ 4",
+        "latex": "x - (9 - 12) \\leq  4",
+        "answer": "x ≤ 1",
+        "choices": [
+          {
+            "value": "x ≤ 7",
+            "latex": "x \\leq  7"
+          },
+          {
+            "value": "x ≥ 1",
+            "latex": "x \\geq  1"
+          },
+          {
+            "value": "x ≤ -1",
+            "latex": "x \\leq  -1"
+          },
+          {
+            "value": "x ≤ 1",
+            "latex": "x \\leq  1"
+          }
+        ]
+      },
+      {
+        "text": "(x - 7) - (-2) ≥ -9",
+        "latex": "(x - 7) - (-2) \\geq  -9",
+        "answer": "x ≥ -4",
+        "choices": [
+          {
+            "value": "x ≥ -4",
+            "latex": "x \\geq  -4"
+          },
+          {
+            "value": "x ≥ -14",
+            "latex": "x \\geq  -14"
+          },
+          {
+            "value": "x ≤ -4",
+            "latex": "x \\leq  -4"
+          },
+          {
+            "value": "x ≥ 4",
+            "latex": "x \\geq  4"
+          }
+        ]
+      },
+      {
+        "text": "x - (-4 + (-6)) < -5",
+        "latex": "x - (-4 + (-6)) < -5",
+        "answer": "x < -15",
+        "choices": [
+          {
+            "value": "x < 5",
+            "latex": "x < 5"
+          },
+          {
+            "value": "x < -15",
+            "latex": "x < -15"
+          },
+          {
+            "value": "x > -15",
+            "latex": "x > -15"
+          },
+          {
+            "value": "x < 15",
+            "latex": "x < 15"
+          }
+        ]
+      },
+      {
+        "text": "(x + (-1)) - 5 ≥ 1",
+        "latex": "(x + (-1)) - 5 \\geq  1",
+        "answer": "x ≥ 7",
+        "choices": [
+          {
+            "value": "x ≥ -5",
+            "latex": "x \\geq  -5"
+          },
+          {
+            "value": "x ≥ 7",
+            "latex": "x \\geq  7"
+          },
+          {
+            "value": "x ≤ 7",
+            "latex": "x \\leq  7"
+          },
+          {
+            "value": "x ≥ -7",
+            "latex": "x \\geq  -7"
+          }
+        ]
+      },
+      {
+        "text": "x - (2 - 9) > 0",
+        "latex": "x - (2 - 9) > 0",
+        "answer": "x > -7",
+        "choices": [
+          {
+            "value": "x > 7",
+            "latex": "x > 7"
+          },
+          {
+            "value": "x > -7",
+            "latex": "x > -7"
+          },
+          {
+            "value": "x < -7",
+            "latex": "x < -7"
+          },
+          {
+            "value": "x > -6",
+            "latex": "x > -6"
+          }
+        ]
+      },
+      {
+        "text": "(x - 3) + (-4) < -11",
+        "latex": "(x - 3) + (-4) < -11",
+        "answer": "x < -4",
+        "choices": [
+          {
+            "value": "x < -18",
+            "latex": "x < -18"
+          },
+          {
+            "value": "x > -4",
+            "latex": "x > -4"
+          },
+          {
+            "value": "x < -4",
+            "latex": "x < -4"
+          },
+          {
+            "value": "x < 4",
+            "latex": "x < 4"
+          }
+        ]
+      },
+      {
+        "text": "x - (-8 + 5) > -4",
+        "latex": "x - (-8 + 5) > -4",
+        "answer": "x > -7",
+        "choices": [
+          {
+            "value": "x > -7",
+            "latex": "x > -7"
+          },
+          {
+            "value": "x > -1",
+            "latex": "x > -1"
+          },
+          {
+            "value": "x < -7",
+            "latex": "x < -7"
+          },
+          {
+            "value": "x > 7",
+            "latex": "x > 7"
+          }
+        ]
+      }
+    ],
+    "4": [
+      {
+        "text": "x + 0.75 ≥ -2.5",
+        "latex": "x + 0.75 \\geq  -2.5",
+        "answer": "x ≥ -3.25",
+        "choices": [
+          {
+            "value": "x ≥ -1.75",
+            "latex": "x \\geq  -1.75"
+          },
+          {
+            "value": "x ≥ -3.25",
+            "latex": "x \\geq  -3.25"
+          },
+          {
+            "value": "x ≤ -3.25",
+            "latex": "x \\leq  -3.25"
+          },
+          {
+            "value": "x ≥ 3.25",
+            "latex": "x \\geq  3.25"
+          }
+        ]
+      },
+      {
+        "text": "x - 1.25 < 3.5",
+        "latex": "x - 1.25 < 3.5",
+        "answer": "x < 4.75",
+        "choices": [
+          {
+            "value": "x < 2.25",
+            "latex": "x < 2.25"
+          },
+          {
+            "value": "x < 4.75",
+            "latex": "x < 4.75"
+          },
+          {
+            "value": "x > 4.75",
+            "latex": "x > 4.75"
+          },
+          {
+            "value": "x < -4.75",
+            "latex": "x < -4.75"
+          }
+        ]
+      },
+      {
+        "text": "(x + 2.4) - 1.75 ≤ -0.5",
+        "latex": "(x + 2.4) - 1.75 \\leq  -0.5",
+        "answer": "x ≤ -1.15",
+        "choices": [
+          {
+            "value": "x ≤ -1.15",
+            "latex": "x \\leq  -1.15"
+          },
+          {
+            "value": "x ≤ 0.15",
+            "latex": "x \\leq  0.15"
+          },
+          {
+            "value": "x ≥ -1.15",
+            "latex": "x \\geq  -1.15"
+          },
+          {
+            "value": "x ≤ 1.15",
+            "latex": "x \\leq  1.15"
+          }
+        ]
+      },
+      {
+        "text": "x - (0.6 - 1.4) < -0.4",
+        "latex": "x - (0.6 - 1.4) < -0.4",
+        "answer": "x < -1.2",
+        "choices": [
+          {
+            "value": "x < -1.2",
+            "latex": "x < -1.2"
+          },
+          {
+            "value": "x < 0.4",
+            "latex": "x < 0.4"
+          },
+          {
+            "value": "x > -1.2",
+            "latex": "x > -1.2"
+          },
+          {
+            "value": "x < 1.2",
+            "latex": "x < 1.2"
+          }
+        ]
+      },
+      {
+        "text": "x + (-3.5) + 1.2 > 0",
+        "latex": "x + (-3.5) + 1.2 > 0",
+        "answer": "x > 2.3",
+        "choices": [
+          {
+            "value": "x > 2.3",
+            "latex": "x > 2.3"
+          },
+          {
+            "value": "x > -2.3",
+            "latex": "x > -2.3"
+          },
+          {
+            "value": "x < 2.3",
+            "latex": "x < 2.3"
+          },
+          {
+            "value": "x > 2.8",
+            "latex": "x > 2.8"
+          }
+        ]
+      },
+      {
+        "text": "(x - 0.8) + (-1.6) ≥ -0.8",
+        "latex": "(x - 0.8) + (-1.6) \\geq  -0.8",
+        "answer": "x ≥ 1.6",
+        "choices": [
+          {
+            "value": "x ≥ -3.2",
+            "latex": "x \\geq  -3.2"
+          },
+          {
+            "value": "x ≤ 1.6",
+            "latex": "x \\leq  1.6"
+          },
+          {
+            "value": "x ≥ -1.6",
+            "latex": "x \\geq  -1.6"
+          },
+          {
+            "value": "x ≥ 1.6",
+            "latex": "x \\geq  1.6"
+          }
+        ]
+      },
+      {
+        "text": "x - (-2.25) ≥ -3.75",
+        "latex": "x - (-2.25) \\geq  -3.75",
+        "answer": "x ≥ -6",
+        "choices": [
+          {
+            "value": "x ≥ -1.5",
+            "latex": "x \\geq  -1.5"
+          },
+          {
+            "value": "x ≤ -6",
+            "latex": "x \\leq  -6"
+          },
+          {
+            "value": "x ≥ -6",
+            "latex": "x \\geq  -6"
+          },
+          {
+            "value": "x ≥ 6",
+            "latex": "x \\geq  6"
+          }
+        ]
+      },
+      {
+        "text": "x + 1.5 - 3.75 > -2.5",
+        "latex": "x + 1.5 - 3.75 > -2.5",
+        "answer": "x > -0.25",
+        "choices": [
+          {
+            "value": "x > -4.75",
+            "latex": "x > -4.75"
+          },
+          {
+            "value": "x < -0.25",
+            "latex": "x < -0.25"
+          },
+          {
+            "value": "x > -0.25",
+            "latex": "x > -0.25"
+          },
+          {
+            "value": "x > 0.25",
+            "latex": "x > 0.25"
+          }
+        ]
+      },
+      {
+        "text": "x + 3/4 < -1/2",
+        "latex": "x + \\frac{3}{4} < \\frac{-1}{2}",
+        "answer": "x < -5/4",
+        "choices": [
+          {
+            "value": "x < 1/4",
+            "latex": "x < \\frac{1}{4}"
+          },
+          {
+            "value": "x < -5/4",
+            "latex": "x < \\frac{-5}{4}"
+          },
+          {
+            "value": "x > -5/4",
+            "latex": "x > \\frac{-5}{4}"
+          },
+          {
+            "value": "x < 5/4",
+            "latex": "x < \\frac{5}{4}"
+          }
+        ]
+      },
+      {
+        "text": "x - 5/6 ≤ -1/3",
+        "latex": "x - \\frac{5}{6} \\leq  \\frac{-1}{3}",
+        "answer": "x ≤ 1/2",
+        "choices": [
+          {
+            "value": "x ≤ -7/6",
+            "latex": "x \\leq  \\frac{-7}{6}"
+          },
+          {
+            "value": "x ≥ 1/2",
+            "latex": "x \\geq  \\frac{1}{2}"
+          },
+          {
+            "value": "x ≤ -1/2",
+            "latex": "x \\leq  \\frac{-1}{2}"
+          },
+          {
+            "value": "x ≤ 1/2",
+            "latex": "x \\leq  \\frac{1}{2}"
+          }
+        ]
+      },
+      {
+        "text": "(x + 3/4) - 1/2 < -5/3",
+        "latex": "(x + \\frac{3}{4}) - \\frac{1}{2} < \\frac{-5}{3}",
+        "answer": "x < -23/12",
+        "choices": [
+          {
+            "value": "x < -23/12",
+            "latex": "x < \\frac{-23}{12}"
+          },
+          {
+            "value": "x < -17/12",
+            "latex": "x < \\frac{-17}{12}"
+          },
+          {
+            "value": "x > -23/12",
+            "latex": "x > \\frac{-23}{12}"
+          },
+          {
+            "value": "x < 23/12",
+            "latex": "x < \\frac{23}{12}"
+          }
+        ]
+      },
+      {
+        "text": "x - (5/6 - 1/3) ≥ 2",
+        "latex": "x - (\\frac{5}{6} - \\frac{1}{3}) \\geq  2",
+        "answer": "x ≥ 5/2",
+        "choices": [
+          {
+            "value": "x ≥ 3/2",
+            "latex": "x \\geq  \\frac{3}{2}"
+          },
+          {
+            "value": "x ≤ 5/2",
+            "latex": "x \\leq  \\frac{5}{2}"
+          },
+          {
+            "value": "x ≥ 5/2",
+            "latex": "x \\geq  \\frac{5}{2}"
+          },
+          {
+            "value": "x ≥ -5/2",
+            "latex": "x \\geq  \\frac{-5}{2}"
+          }
+        ]
+      },
+      {
+        "text": "x + (-2/3) + 1/6 < -3/4",
+        "latex": "x + (\\frac{-2}{3}) + \\frac{1}{6} < \\frac{-3}{4}",
+        "answer": "x < -1/4",
+        "choices": [
+          {
+            "value": "x < -5/4",
+            "latex": "x < \\frac{-5}{4}"
+          },
+          {
+            "value": "x > -1/4",
+            "latex": "x > \\frac{-1}{4}"
+          },
+          {
+            "value": "x < -1/4",
+            "latex": "x < \\frac{-1}{4}"
+          },
+          {
+            "value": "x < 1/4",
+            "latex": "x < \\frac{1}{4}"
+          }
+        ]
+      },
+      {
+        "text": "(x - 7/8) + 1/4 ≥ 0",
+        "latex": "(x - \\frac{7}{8}) + \\frac{1}{4} \\geq  0",
+        "answer": "x ≥ 5/8",
+        "choices": [
+          {
+            "value": "x ≥ -5/8",
+            "latex": "x \\geq  \\frac{-5}{8}"
+          },
+          {
+            "value": "x ≥ 5/8",
+            "latex": "x \\geq  \\frac{5}{8}"
+          },
+          {
+            "value": "x ≤ 5/8",
+            "latex": "x \\leq  \\frac{5}{8}"
+          },
+          {
+            "value": "x ≥ 9/8",
+            "latex": "x \\geq  \\frac{9}{8}"
+          }
+        ]
+      },
+      {
+        "text": "x - (-3/5) < -2",
+        "latex": "x - (\\frac{-3}{5}) < -2",
+        "answer": "x < -13/5",
+        "choices": [
+          {
+            "value": "x < -7/5",
+            "latex": "x < \\frac{-7}{5}"
+          },
+          {
+            "value": "x < -13/5",
+            "latex": "x < \\frac{-13}{5}"
+          },
+          {
+            "value": "x > -13/5",
+            "latex": "x > \\frac{-13}{5}"
+          },
+          {
+            "value": "x < 13/5",
+            "latex": "x < \\frac{13}{5}"
+          }
+        ]
+      },
+      {
+        "text": "x + 4/5 - 3/10 ≤ -1/5",
+        "latex": "x + \\frac{4}{5} - \\frac{3}{10} \\leq  \\frac{-1}{5}",
+        "answer": "x ≤ -7/10",
+        "choices": [
+          {
+            "value": "x ≤ 3/10",
+            "latex": "x \\leq  \\frac{3}{10}"
+          },
+          {
+            "value": "x ≥ -7/10",
+            "latex": "x \\geq  \\frac{-7}{10}"
+          },
+          {
+            "value": "x ≤ -7/10",
+            "latex": "x \\leq  \\frac{-7}{10}"
+          },
+          {
+            "value": "x ≤ 7/10",
+            "latex": "x \\leq  \\frac{7}{10}"
+          }
+        ]
+      },
+      {
+        "text": "(x + 1.25) - 0.5 ≤ -2",
+        "latex": "(x + 1.25) - 0.5 \\leq  -2",
+        "answer": "x ≤ -2.75",
+        "choices": [
+          {
+            "value": "x ≤ -2.75",
+            "latex": "x \\leq  -2.75"
+          },
+          {
+            "value": "x ≤ -1.25",
+            "latex": "x \\leq  -1.25"
+          },
+          {
+            "value": "x ≥ -2.75",
+            "latex": "x \\geq  -2.75"
+          },
+          {
+            "value": "x ≤ 2.75",
+            "latex": "x \\leq  2.75"
+          }
+        ]
+      },
+      {
+        "text": "x - (1.75 - 0.25) > 1",
+        "latex": "x - (1.75 - 0.25) > 1",
+        "answer": "x > 2.5",
+        "choices": [
+          {
+            "value": "x > -0.5",
+            "latex": "x > -0.5"
+          },
+          {
+            "value": "x < 2.5",
+            "latex": "x < 2.5"
+          },
+          {
+            "value": "x > 2.5",
+            "latex": "x > 2.5"
+          },
+          {
+            "value": "x > -2.5",
+            "latex": "x > -2.5"
+          }
+        ]
+      },
+      {
+        "text": "(x + 5/6) - 7/6 < -4/3",
+        "latex": "(x + \\frac{5}{6}) - \\frac{7}{6} < \\frac{-4}{3}",
+        "answer": "x < -1",
+        "choices": [
+          {
+            "value": "x < -5/3",
+            "latex": "x < \\frac{-5}{3}"
+          },
+          {
+            "value": "x > -1",
+            "latex": "x > -1"
+          },
+          {
+            "value": "x < 1",
+            "latex": "x < 1"
+          },
+          {
+            "value": "x < -1",
+            "latex": "x < -1"
+          }
+        ]
+      },
+      {
+        "text": "x - (1/4 - 3/4) ≤ -1",
+        "latex": "x - (\\frac{1}{4} - \\frac{3}{4}) \\leq  -1",
+        "answer": "x ≤ -3/2",
+        "choices": [
+          {
+            "value": "x ≤ -1/2",
+            "latex": "x \\leq  \\frac{-1}{2}"
+          },
+          {
+            "value": "x ≤ -3/2",
+            "latex": "x \\leq  \\frac{-3}{2}"
+          },
+          {
+            "value": "x ≥ -3/2",
+            "latex": "x \\geq  \\frac{-3}{2}"
+          },
+          {
+            "value": "x ≤ 3/2",
+            "latex": "x \\leq  \\frac{3}{2}"
+          }
+        ]
+      }
+    ]
+  }
+}
