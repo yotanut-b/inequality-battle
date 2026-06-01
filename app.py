@@ -4,6 +4,7 @@ import os
 import random
 import time
 import uuid
+from zoneinfo import ZoneInfo
 
 import streamlit as st
 
@@ -262,7 +263,7 @@ def build_result_row(state, role, status):
         if row["ผล"] == "ผิด"
     ]
     return [
-        datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        datetime.datetime.now(ZoneInfo("Asia/Bangkok")).strftime("%Y-%m-%d %H:%M:%S"),
         st.session_state.room_id,
         name,
         role,
@@ -275,8 +276,60 @@ def build_result_row(state, role, status):
     ]
 
 
+def claim_room_result_save(state, roles):
+    firestore_db = get_firestore_db()
+    if not firestore_db:
+        return not state.get("results_saving", False)
+    room_ref = firestore_db.collection("rooms").document(get_room_id())
+    transaction = firestore_db.transaction()
+
+    @firestore.transactional
+    def claim(transaction):
+        snapshot = room_ref.get(transaction=transaction)
+        if not snapshot.exists:
+            return {"allowed": False}
+        latest_state = snapshot.to_dict()
+        if latest_state.get("results_saving", False):
+            return {"allowed": False}
+        needs_save = any(
+            not latest_state.get("p1_saved" if role == "Player 1" else "p2_saved")
+            and latest_state["p1_name" if role == "Player 1" else "p2_name"] != role
+            for role in roles
+        )
+        if needs_save:
+            transaction.update(room_ref, {"results_saving": True})
+        return {
+            "allowed": True,
+            "p1_saved": latest_state.get("p1_saved", False),
+            "p2_saved": latest_state.get("p2_saved", False),
+        }
+
+    result = claim(transaction)
+    state["p1_saved"] = result.get("p1_saved", state.get("p1_saved", False))
+    state["p2_saved"] = result.get("p2_saved", state.get("p2_saved", False))
+    return result["allowed"]
+
+
+def finish_room_result_save(state):
+    firestore_db = get_firestore_db()
+    if firestore_db:
+        firestore_db.collection("rooms").document(get_room_id()).update(
+            {
+                "p1_saved": state.get("p1_saved", False),
+                "p2_saved": state.get("p2_saved", False),
+                "results_saving": False,
+            }
+        )
+        return
+    state["results_saving"] = False
+    update_db(state)
+
+
 def save_room_results(state, status, roles=None):
     roles = roles or ["Player 1", "Player 2"]
+    if not claim_room_result_save(state, roles):
+        return False
+    state["results_saving"] = True
     saved_all = True
     for role in roles:
         saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
@@ -284,7 +337,7 @@ def save_room_results(state, status, roles=None):
         if not state.get(saved_key) and name != role:
             state[saved_key] = save_to_gsheet(build_result_row(state, role, status))
             saved_all = state[saved_key] and saved_all
-    update_db(state)
+    finish_room_result_save(state)
     return saved_all
 
 
