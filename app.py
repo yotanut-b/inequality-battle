@@ -7,7 +7,7 @@ import time
 import streamlit as st
 
 try:
-    import google.generativeai as genai
+    from google import genai
 except ImportError:
     genai = None
 
@@ -115,6 +115,7 @@ def get_initial_state(topic=None):
         "last_roll": 0,
         "old_pos": 0,
         "ai_feedback": "",
+        "ai_feedback_source": "",
         "p1_items": {"shield": 0, "glass": 0},
         "p2_items": {"shield": 0, "glass": 0},
         "winner": None,
@@ -180,19 +181,20 @@ def save_to_gsheet(data_row):
 
 
 def get_ai_response(question, answer, selected):
-    fallback = "ทบทวนการย้ายข้างและตรวจสอบว่าเมื่อคูณหรือหารด้วยจำนวนลบ ต้องกลับเครื่องหมายอสมการ"
+    fallback = "ลองพิจารณาว่าต้องทำอะไรกับทั้งสองข้างของอสมการ และตรวจสอบเครื่องหมายอีกครั้ง"
     if not genai or "GENAI_API_KEY" not in st.secrets:
-        return fallback
+        return fallback, "ข้อความสำรอง: ยังไม่ได้เชื่อมต่อ Gemini"
     try:
-        genai.configure(api_key=st.secrets["GENAI_API_KEY"])
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        client = genai.Client(api_key=st.secrets["GENAI_API_KEY"])
         prompt = (
             f"โจทย์: {question}\nเฉลย: {answer}\nนักเรียนตอบ: {selected}\n"
-            "อธิบายวิธีคิดที่ถูกต้องแบบกระชับสำหรับนักเรียนมัธยม"
+            "อธิบายวิธีคิดที่ถูกต้องเป็นภาษาไทยแบบกระชับสำหรับนักเรียนมัธยม "
+            "ใช้ไม่เกิน 4 ประโยค และอธิบายให้ตรงกับโจทย์ข้อนี้"
         )
-        return model.generate_content(prompt).text
-    except Exception:
-        return fallback
+        response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
+        return response.text, "AI Feedback จาก Gemini"
+    except Exception as error:
+        return fallback, f"ข้อความสำรอง: Gemini ใช้งานไม่สำเร็จ ({type(error).__name__})"
 
 
 def render_formula(text, latex=None):
@@ -427,7 +429,7 @@ with action:
                     else:
                         position_key = "p1_pos" if role == "Player 1" else "p2_pos"
                         state[position_key] = max(0, state["old_pos"] - 3)
-                    state["ai_feedback"] = get_ai_response(
+                    state["ai_feedback"], state["ai_feedback_source"] = get_ai_response(
                         question["text"], question["answer"], choice["value"]
                     )
                     state["game_phase"] = "FEEDBACK"
@@ -436,6 +438,7 @@ with action:
 
     elif phase == "FEEDBACK":
         st.error("ตอบผิด")
+        st.caption(state.get("ai_feedback_source", "ข้อความสำรอง"))
         st.info(state["ai_feedback"])
         if st.button("จบตา", type="primary", use_container_width=True):
             state["turn"] = other_role
