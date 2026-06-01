@@ -314,7 +314,11 @@ if state.get("winner"):
 header_main, header_refresh, header_reset = st.columns([4, 1, 1])
 with header_main:
     st.subheader(f"{my_name} ({role})")
-    st.write(f"โล่: {my_items['shield']} | แว่นขยาย: {my_items['glass']}")
+    level_key = "p1_level" if role == "Player 1" else "p2_level"
+    st.write(
+        f"ระดับ: {state[level_key]}/{get_max_level(topic)} | "
+        f"โล่: {my_items['shield']} | แว่นขยาย: {my_items['glass']}"
+    )
 with header_refresh:
     if st.button("รีเฟรช", use_container_width=True):
         st.rerun()
@@ -414,8 +418,7 @@ with action:
                 if is_correct:
                     level_key = "p1_level" if role == "Player 1" else "p2_level"
                     state[level_key] = min(get_max_level(topic), state[level_key] + 1)
-                    state["turn"] = other_role
-                    state["game_phase"] = "READY"
+                    state["game_phase"] = "CORRECT_FEEDBACK"
                 else:
                     level_key = "p1_level" if role == "Player 1" else "p2_level"
                     state[level_key] = max(1, state[level_key] - 1)
@@ -434,6 +437,16 @@ with action:
     elif phase == "FEEDBACK":
         st.error("ตอบผิด")
         st.info(state["ai_feedback"])
+        if st.button("จบตา", type="primary", use_container_width=True):
+            state["turn"] = other_role
+            state["game_phase"] = "READY"
+            update_db(state)
+            st.rerun()
+
+    elif phase == "CORRECT_FEEDBACK":
+        level_key = "p1_level" if role == "Player 1" else "p2_level"
+        st.success("ตอบถูก")
+        st.info(f"ระดับปัจจุบัน: {state[level_key]}/{get_max_level(topic)}")
         if st.button("จบตา", type="primary", use_container_width=True):
             state["turn"] = other_role
             state["game_phase"] = "READY"
