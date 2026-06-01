@@ -210,9 +210,10 @@ def return_to_home(message):
 
 def close_expired_room():
     state = get_db()
-    save_room_results(state, "หมดเวลา")
-    delete_db()
-    return_to_home("ห้องถูกปิดแล้ว เนื่องจากไม่มีการเคลื่อนไหวเกิน 3 นาที กรุณาเข้าห้องใหม่")
+    if save_room_results(state, "หมดเวลา"):
+        delete_db()
+        return_to_home("ห้องถูกปิดแล้ว เนื่องจากไม่มีการเคลื่อนไหวเกิน 3 นาที กรุณาเข้าห้องใหม่")
+    return_to_home("ห้องหมดเวลาแล้ว แต่ยังบันทึกผลไม่สำเร็จ กรุณาแจ้งผู้ดูแลระบบ")
 
 
 def reset_game(topic):
@@ -220,21 +221,33 @@ def reset_game(topic):
 
 
 def save_to_gsheet(data_row):
-    if "gcp_service_account" not in st.secrets or not gspread:
+    if not gspread:
+        st.warning("บันทึกผลไม่ได้: ไม่พบแพ็กเกจ gspread")
+        return False
+    secret_name = None
+    if "gcp_service_account" in st.secrets:
+        secret_name = "gcp_service_account"
+    elif "firebase_service_account" in st.secrets:
+        secret_name = "firebase_service_account"
+    if not secret_name:
+        st.warning("บันทึกผลไม่ได้: ยังไม่ได้ตั้งค่า service account ใน Streamlit Secrets")
         return False
     try:
         scope = [
             "https://spreadsheets.google.com/feeds",
             "https://www.googleapis.com/auth/drive",
         ]
-        credentials = dict(st.secrets["gcp_service_account"])
+        credentials = dict(st.secrets[secret_name])
         credentials["private_key"] = credentials["private_key"].replace("\\n", "\n")
         service_account = ServiceAccountCredentials.from_json_keyfile_dict(credentials, scope)
         sheet = gspread.authorize(service_account).open("MathGame_Data").sheet1
         sheet.append_row(data_row)
         return True
     except Exception as error:
-        st.warning(f"บันทึกลง Google Sheets ไม่สำเร็จ: {error}")
+        st.warning(
+            "บันทึกลง Google Sheets ไม่สำเร็จ กรุณาตรวจว่าแชร์ชีต MathGame_Data "
+            f"ให้ service account เป็น Editor และเปิด Google Sheets API กับ Google Drive API แล้ว: {error}"
+        )
         return False
 
 
@@ -264,12 +277,15 @@ def build_result_row(state, role, status):
 
 def save_room_results(state, status, roles=None):
     roles = roles or ["Player 1", "Player 2"]
+    saved_all = True
     for role in roles:
         saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
         name = state["p1_name"] if role == "Player 1" else state["p2_name"]
         if not state.get(saved_key) and name != role:
             state[saved_key] = save_to_gsheet(build_result_row(state, role, status))
+            saved_all = state[saved_key] and saved_all
     update_db(state)
+    return saved_all
 
 
 def get_ai_response(question, answer, selected):
@@ -348,10 +364,12 @@ if "room_id" not in st.session_state:
 if "my_role" not in st.session_state:
     state = get_db()
     if is_room_expired(state):
-        save_room_results(state, "หมดเวลา")
-        delete_db()
-        state = get_initial_state()
-        update_db(state)
+        if save_room_results(state, "หมดเวลา"):
+            delete_db()
+            state = get_initial_state()
+            update_db(state)
+        else:
+            return_to_home("ห้องหมดเวลาแล้ว แต่ยังบันทึกผลไม่สำเร็จ กรุณาแจ้งผู้ดูแลระบบ")
     selected_topic = st.session_state.selected_topic
     st.header(f"ห้อง: {st.session_state.room_id}")
     if state.get("topic") and state["topic"] != selected_topic:
@@ -433,9 +451,10 @@ with header_reset:
         st.rerun()
 with header_timeout:
     if st.button("หมดเวลา", help="บันทึกผลของทั้งสองคน ปิดห้อง และกลับหน้าแรก", use_container_width=True):
-        save_room_results(state, "หมดเวลา")
-        delete_db()
-        return_to_home("บันทึกผลและปิดห้องแล้ว รหัสห้องนี้พร้อมใช้สำหรับเกมใหม่")
+        if save_room_results(state, "หมดเวลา"):
+            delete_db()
+            return_to_home("บันทึกผลและปิดห้องแล้ว รหัสห้องนี้พร้อมใช้สำหรับเกมใหม่")
+        st.error("ยังปิดห้องไม่ได้ เพราะบันทึกผลไม่สำเร็จ กรุณาตรวจการตั้งค่า Google Sheets")
 
 board, action = st.columns([2, 1])
 with board:
