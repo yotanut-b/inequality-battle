@@ -209,6 +209,8 @@ def return_to_home(message):
 
 
 def close_expired_room():
+    state = get_db()
+    save_room_results(state, "หมดเวลา")
     delete_db()
     return_to_home("ห้องถูกปิดแล้ว เนื่องจากไม่มีการเคลื่อนไหวเกิน 3 นาที กรุณาเข้าห้องใหม่")
 
@@ -219,7 +221,7 @@ def reset_game(topic):
 
 def save_to_gsheet(data_row):
     if "gcp_service_account" not in st.secrets or not gspread:
-        return
+        return False
     try:
         scope = [
             "https://spreadsheets.google.com/feeds",
@@ -230,8 +232,44 @@ def save_to_gsheet(data_row):
         service_account = ServiceAccountCredentials.from_json_keyfile_dict(credentials, scope)
         sheet = gspread.authorize(service_account).open("MathGame_Data").sheet1
         sheet.append_row(data_row)
+        return True
     except Exception as error:
         st.warning(f"บันทึกลง Google Sheets ไม่สำเร็จ: {error}")
+        return False
+
+
+def build_result_row(state, role, status):
+    name = state["p1_name"] if role == "Player 1" else state["p2_name"]
+    history = state["p1_history"] if role == "Player 1" else state["p2_history"]
+    correct = sum(row["ผล"] == "ถูก" for row in history)
+    percentage = correct / len(history) * 100 if history else 0
+    mistakes = [
+        f"{row['โจทย์']} | ตอบ: {row['ตอบ']} | เฉลย: {row['เฉลย']}"
+        for row in history
+        if row["ผล"] == "ผิด"
+    ]
+    return [
+        datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        st.session_state.room_id,
+        name,
+        role,
+        TOPICS[state["topic"]],
+        status,
+        len(history),
+        correct,
+        f"{percentage:.2f}%",
+        " || ".join(mistakes),
+    ]
+
+
+def save_room_results(state, status, roles=None):
+    roles = roles or ["Player 1", "Player 2"]
+    for role in roles:
+        saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
+        name = state["p1_name"] if role == "Player 1" else state["p2_name"]
+        if not state.get(saved_key) and name != role:
+            state[saved_key] = save_to_gsheet(build_result_row(state, role, status))
+    update_db(state)
 
 
 def get_ai_response(question, answer, selected):
@@ -295,6 +333,7 @@ if "room_id" not in st.session_state:
 if "my_role" not in st.session_state:
     state = get_db()
     if is_room_expired(state):
+        save_room_results(state, "หมดเวลา")
         delete_db()
         state = get_initial_state()
         update_db(state)
@@ -351,35 +390,14 @@ if state.get("winner"):
     saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
     history = state[history_key]
     if not state[saved_key]:
-        correct = sum(row["ผล"] == "ถูก" for row in history)
-        percentage = correct / len(history) * 100 if history else 0
-        mistakes = [
-            f"{row['โจทย์']} | ตอบ: {row['ตอบ']} | เฉลย: {row['เฉลย']}"
-            for row in history
-            if row["ผล"] == "ผิด"
-        ]
-        save_to_gsheet(
-            [
-                datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                st.session_state.room_id,
-                my_name,
-                role,
-                TOPICS[topic],
-                len(history),
-                correct,
-                f"{percentage:.2f}%",
-                " || ".join(mistakes),
-            ]
-        )
-        state[saved_key] = True
-        update_db(state)
+        save_room_results(state, "จบเกม", roles=[role])
     st.dataframe(history, use_container_width=True)
     if st.button("เริ่มเกมใหม่"):
         reset_game(topic)
         st.rerun()
     st.stop()
 
-header_main, header_refresh, header_reset = st.columns([4, 1, 1])
+header_main, header_refresh, header_reset, header_timeout = st.columns([3, 1, 1, 1])
 with header_main:
     st.subheader(f"{my_name} ({role})")
     level_key = "p1_level" if role == "Player 1" else "p2_level"
@@ -398,6 +416,11 @@ with header_reset:
         state[reset_key] = True
         update_db(state)
         st.rerun()
+with header_timeout:
+    if st.button("หมดเวลา", help="บันทึกผลของทั้งสองคน ปิดห้อง และกลับหน้าแรก", use_container_width=True):
+        save_room_results(state, "หมดเวลา")
+        delete_db()
+        return_to_home("บันทึกผลและปิดห้องแล้ว รหัสห้องนี้พร้อมใช้สำหรับเกมใหม่")
 
 board, action = st.columns([2, 1])
 with board:
