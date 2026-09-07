@@ -211,19 +211,19 @@ def return_to_home(message):
 
 def close_expired_room():
     state = get_db()
-    if save_room_results(state, "หมดเวลา"):
-        delete_db()
-        return_to_home("ห้องถูกปิดแล้ว เนื่องจากไม่มีการเคลื่อนไหวเกิน 3 นาที กรุณาเข้าห้องใหม่")
-    return_to_home("ห้องหมดเวลาแล้ว แต่ยังบันทึกผลไม่สำเร็จ กรุณาแจ้งผู้ดูแลระบบ")
+    save_room_results(state, "หมดเวลา", show_warning=False)
+    delete_db()
+    return_to_home("ห้องหมดเวลาแล้ว กรุณาเริ่มเกมใหม่")
 
 
 def reset_game(topic):
     update_db(get_initial_state(topic))
 
 
-def save_to_gsheet(data_row):
+def save_to_gsheet(data_row, show_warning=True):
     if not gspread:
-        st.warning("บันทึกผลไม่ได้: ไม่พบแพ็กเกจ gspread")
+        if show_warning:
+            st.warning("บันทึกผลไม่ได้: ไม่พบแพ็กเกจ gspread")
         return False
     secret_name = None
     if "gcp_service_account" in st.secrets:
@@ -231,7 +231,8 @@ def save_to_gsheet(data_row):
     elif "firebase_service_account" in st.secrets:
         secret_name = "firebase_service_account"
     if not secret_name:
-        st.warning("บันทึกผลไม่ได้: ยังไม่ได้ตั้งค่า service account ใน Streamlit Secrets")
+        if show_warning:
+            st.warning("บันทึกผลไม่ได้: ยังไม่ได้ตั้งค่า service account ใน Streamlit Secrets")
         return False
     try:
         scope = [
@@ -245,10 +246,11 @@ def save_to_gsheet(data_row):
         sheet.append_row(data_row)
         return True
     except Exception as error:
-        st.warning(
-            "บันทึกลง Google Sheets ไม่สำเร็จ กรุณาตรวจว่าแชร์ชีต MathGame_Data "
-            f"ให้ service account เป็น Editor และเปิด Google Sheets API กับ Google Drive API แล้ว: {error}"
-        )
+        if show_warning:
+            st.warning(
+                "บันทึกลง Google Sheets ไม่สำเร็จ กรุณาตรวจว่าแชร์ชีต MathGame_Data "
+                f"ให้ service account เป็น Editor และเปิด Google Sheets API กับ Google Drive API แล้ว: {error}"
+            )
         return False
 
 
@@ -325,7 +327,7 @@ def finish_room_result_save(state):
     update_db(state)
 
 
-def save_room_results(state, status, roles=None):
+def save_room_results(state, status, roles=None, show_warning=True):
     roles = roles or ["Player 1", "Player 2"]
     if not claim_room_result_save(state, roles):
         return False
@@ -335,7 +337,7 @@ def save_room_results(state, status, roles=None):
         saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
         name = state["p1_name"] if role == "Player 1" else state["p2_name"]
         if not state.get(saved_key) and name != role:
-            state[saved_key] = save_to_gsheet(build_result_row(state, role, status))
+            state[saved_key] = save_to_gsheet(build_result_row(state, role, status), show_warning)
             saved_all = state[saved_key] and saved_all
     finish_room_result_save(state)
     return saved_all
@@ -417,12 +419,10 @@ if "room_id" not in st.session_state:
 if "my_role" not in st.session_state:
     state = get_db()
     if is_room_expired(state):
-        if save_room_results(state, "หมดเวลา"):
-            delete_db()
-            state = get_initial_state()
-            update_db(state)
-        else:
-            return_to_home("ห้องหมดเวลาแล้ว แต่ยังบันทึกผลไม่สำเร็จ กรุณาแจ้งผู้ดูแลระบบ")
+        save_room_results(state, "หมดเวลา", show_warning=False)
+        delete_db()
+        state = get_initial_state()
+        update_db(state)
     selected_topic = st.session_state.selected_topic
     st.header(f"ห้อง: {st.session_state.room_id}")
     if state.get("topic") and state["topic"] != selected_topic:
