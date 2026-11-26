@@ -46,7 +46,7 @@ TOPICS = {
     "linear": "การแก้อสมการเชิงเส้นตัวแปรเดียว",
 }
 
-st.set_page_config(page_title=f"{APP_NAME} | {APP_SUBTITLE}", page_icon="📝", layout="wide")
+st.set_page_config(page_title=f"{APP_NAME}: {APP_SUBTITLE}", page_icon="📝", layout="wide")
 st.html(game_style_html())
 
 
@@ -560,7 +560,7 @@ def home_hero_html():
         image = f'<img src="data:image/webp;base64,{data}" alt="">'
     return (
         f'<header class="battle-hero">{image}'
-        f'<h1>{escape(APP_NAME)}</h1><p>{escape(APP_SUBTITLE)}</p></header>'
+        f'<h1>{escape(APP_NAME)}:</h1><p>{escape(APP_SUBTITLE)}</p></header>'
     )
 
 
@@ -739,7 +739,7 @@ if state.get("p1_reset_req") and state.get("p2_reset_req"):
     st.rerun()
 
 st.html(
-    f'<header class="battle-room"><h1>{APP_NAME}</h1>'
+    f'<header class="battle-room"><h1>{APP_NAME}:</h1>'
     f'<p>{APP_SUBTITLE}</p>'
     f'<p>ห้อง {escape(st.session_state.room_id)} · {escape(TOPICS[topic])}</p></header>'
 )
