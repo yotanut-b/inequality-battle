@@ -580,18 +580,102 @@ def render_choice(choice, index):
         return st.button(f"เลือกข้อ {index + 1}", key=f"answer_{index}", use_container_width=True)
 
 
-def render_score(history):
-    answered, correct, wrong = st.columns(3)
-    answered.metric("ตอบทั้งหมด", len(history))
-    correct.metric("ตอบถูก", sum(row["ผล"] == "ถูก" for row in history))
-    wrong.metric("ตอบผิด", sum(row["ผล"] == "ผิด" for row in history))
+SUMMARY_STYLE = """
+<style>
+.battle-finale {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 1rem;
+  padding: clamp(1.15rem, 4vw, 2.5rem); border-radius: 1.5rem;
+  color: #fff8e5; background: radial-gradient(ellipse at 85% 20%, #8d7545, transparent 56%), #214738;
+  box-shadow: inset 0 0 0 1px #fbe6a244;
+}
+.battle-finale--timeout { background: radial-gradient(ellipse at 90% 0%, #4d6655, transparent 70%), #334b45; }
+.battle-finale h1 {
+  color: inherit; padding: 0; margin: .2rem 0; font-size: clamp(2.05rem, 5vw, 3.55rem);
+  overflow-wrap: anywhere; line-height: 1.15;
+}
+.battle-finale p { margin: .3rem 0 0; color: #fff0cd; font-size: clamp(1.15rem, 3vw, 1.5rem); }
+.battle-finale strong { color: #ffe0a0; font-size: 1.25rem; }
+.battle-finale .trail-pawn { font-size: clamp(3.3rem, 10vw, 7rem); filter: drop-shadow(0 .4rem .55rem #101e1880); }
+.battle-finale--win .trail-pawn { animation: camp-arrival .5s ease-out both; }
+@keyframes camp-arrival { from { transform: translateY(.6rem) scale(.82); } }
+@media (prefers-reduced-motion: reduce) { .battle-finale--win .trail-pawn { animation: none; } }
+.battle-summary-scores {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem;
+}
+.battle-summary-stat, .battle-review {
+  background: #f7f5e9; color: #24392e; border: 1px solid #d8ddc4; border-radius: 1rem;
+  padding: .7rem .85rem; overflow-wrap: anywhere;
+}
+.battle-summary-stat strong { display: block; font-size: clamp(1.75rem, 5vw, 2.35rem); line-height: 1.1; }
+.battle-summary-stat span { display: block; margin-top: .25rem; font-size: 1.15rem; }
+.battle-summary-correct { background: #e6f0dd; }
+.battle-summary-wrong { background: #fbe9df; }
+.battle-review summary { font-size: 1.2rem; cursor: pointer; }
+.battle-review dl { margin: .7rem 0 0; }
+.battle-review dt { font-weight: 700; }
+.battle-review dd { margin: 0 0 .45rem; white-space: pre-wrap; }
+@media (max-width: 560px) {
+  .battle-summary-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .battle-finale { gap: .5rem; }
+}
+</style>
+"""
+
+
+def render_round_summary(summary, role):
+    player = 1 if role == "Player 1" else 2
+    name = summary[f"p{player}_name"]
+    winner_role = summary.get("winner")
+    if winner_role:
+        winner = 1 if winner_role == "Player 1" else 2
+        winner_name = summary[f"p{winner}_name"]
+        heading = f"{winner_name} ถึงแคมป์ก่อน!"
+        label = "คุณชนะรอบนี้" if winner_role == role else "จบการเดินทาง"
+        detail = f"ผู้ชนะ · {PLAYER_ANIMALS[winner]}"
+        variant = "win"
+        character = pawn_html(winner)
+    else:
+        heading, label, detail = "หมดเวลาเล่น", "จบการเดินทาง", "สรุปผลจากข้อที่ตอบก่อนหมดเวลา"
+        variant = "timeout"
+        character = pawn_html(player)
+
+    st.html(
+        SUMMARY_STYLE + f'<header class="battle-finale battle-finale--{variant}">'
+        f'<div><strong>{escape(label)}</strong><h1>{escape(heading)}</h1>'
+        f'<p>{escape(detail)}</p></div>{character}</header>'
+    )
+    st.subheader(f"ผลการเล่นของ {name}")
+    st.caption(f"ห้อง {st.session_state.room_id}")
+    history = summary[f"p{player}_history"]
+    total = len(history)
+    correct = sum(row["ผล"] == "ถูก" for row in history)
+    wrong = sum(row["ผล"] == "ผิด" for row in history)
+    stats = (
+        ("ตอบทั้งหมด", total, ""),
+        ("ตอบถูก", correct, " battle-summary-correct"),
+        ("ตอบผิด", wrong, " battle-summary-wrong"),
+        ("ความถูกต้อง", f"{correct / total:.0%}" if total else "–", ""),
+    )
+    tiles = "".join(
+        f'<div class="battle-summary-stat{style}"><strong>{value}</strong><span>{label}</span></div>'
+        for label, value, style in stats
+    )
+    st.html(f'<section class="battle-summary-scores" aria-label="คะแนนของคุณ">{tiles}</section>')
+    render_mistakes(history)
 
 
 def render_mistakes(history):
     mistakes = [row for row in history if row["ผล"] == "ผิด"]
     if mistakes:
-        st.subheader("ข้อที่ควรกลับไปทบทวน")
-        st.dataframe(mistakes, use_container_width=True, hide_index=True)
+        st.subheader(f"ข้อที่ควรทบทวน ({len(mistakes)})")
+        for index, row in enumerate(mistakes, start=1):
+            opened = " open" if index == 1 else ""
+            st.html(
+                f'<details class="battle-review"{opened}>'
+                f'<summary>{index}. {escape(str(row["โจทย์"]))}</summary>'
+                f'<dl><dt>คำตอบที่เลือก</dt><dd>{escape(str(row["ตอบ"]))}</dd>'
+                f'<dt>เฉลย</dt><dd>{escape(str(row["เฉลย"]))}</dd></dl></details>'
+            )
     elif history:
         st.success("คุณตอบถูกทุกข้อ")
     else:
@@ -599,17 +683,7 @@ def render_mistakes(history):
 
 
 def render_closed_summary(summary, role):
-    player = 1 if role == "Player 1" else 2
-    st.title("สรุปการเดินทาง")
-    if summary["winner"]:
-        winner = 1 if summary["winner"] == "Player 1" else 2
-        st.success(f"{summary[f'p{winner}_name']} ถึงแคมป์แล้ว")
-    else:
-        st.info("หมดเวลาเล่น")
-    st.caption(f"ห้อง {st.session_state.room_id} · {summary[f'p{player}_name']}")
-    history = summary[f"p{player}_history"]
-    render_score(history)
-    render_mistakes(history)
+    render_round_summary(summary, role)
     if st.button("กลับหน้าแรก", type="primary"):
         return_to_home()
     st.stop()
@@ -738,30 +812,23 @@ if state.get("p1_reset_req") and state.get("p2_reset_req"):
     reset_game(topic)
     st.rerun()
 
+if state.get("winner"):
+    render_round_summary(state, role)
+    saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
+    if not state[saved_key]:
+        save_room_results(state, "จบเกม", roles=[role])
+    with st.expander("ดูกระดานเมื่อจบเกม"):
+        st.html(game_board_html(state, MYSTERY_SPOTS))
+    if st.button("กลับหน้าแรก", type="primary"):
+        close_room_with_summary(game_id)
+        return_to_home()
+    st.stop()
+
 st.html(
     f'<header class="battle-room"><h1>{APP_NAME}:</h1>'
     f'<p>{APP_SUBTITLE}</p>'
     f'<p>ห้อง {escape(st.session_state.room_id)} · {escape(TOPICS[topic])}</p></header>'
 )
-
-if state.get("winner"):
-    winner_name = p1_name if state["winner"] == "Player 1" else p2_name
-    st.success(f"⛺ {winner_name} ถึงแคมป์แล้ว")
-    finish_board, finish_summary = st.columns([2, 1])
-    finish_board.html(game_board_html(state, MYSTERY_SPOTS, fresh_walk(state)))
-    history_key = "p1_history" if role == "Player 1" else "p2_history"
-    saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
-    history = state[history_key]
-    if not state[saved_key]:
-        save_room_results(state, "จบเกม", roles=[role])
-    with finish_summary:
-        st.subheader("สรุปการเดินทาง")
-        render_score(history)
-    render_mistakes(history)
-    if st.button("กลับหน้าแรก", type="primary"):
-        close_room_with_summary(game_id)
-        return_to_home()
-    st.stop()
 
 header_main, header_refresh, header_reset, header_timeout = st.columns([3, 1, 1, 1])
 with header_main:
