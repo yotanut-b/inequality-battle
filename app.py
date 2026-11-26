@@ -4,11 +4,12 @@ import os
 import random
 import time
 import uuid
+from html import escape
 from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from addition_board import addition_board_html
+from addition_board import GAME_STYLE, game_board_html
 
 try:
     from google import genai
@@ -42,6 +43,7 @@ TOPICS = {
 }
 
 st.set_page_config(page_title=APP_NAME, page_icon="📝", layout="wide")
+st.html(GAME_STYLE)
 
 
 @st.cache_data
@@ -363,10 +365,10 @@ def get_ai_response(question, answer, selected):
 
 
 def render_formula(text, latex=None):
-    if text:
-        st.write(text)
     if latex:
         st.latex(latex)
+    elif text:
+        st.write(text)
 
 
 def render_choice(choice, index):
@@ -375,44 +377,40 @@ def render_choice(choice, index):
             st.latex(choice["latex"])
         else:
             st.write(choice["value"])
-        return st.button("เลือกคำตอบนี้", key=f"answer_{index}", use_container_width=True)
+        return st.button(f"เลือกข้อ {index + 1}", key=f"answer_{index}", use_container_width=True)
 
 
 @st.fragment(run_every=3)
-def render_waiting_panel(role, show_addition_board=False):
+def render_waiting_panel(role):
     latest_state = get_db()
-    if is_room_expired(latest_state):
-        close_expired_room()
     if (
         latest_state.get("turn") == role
         or latest_state.get("winner")
         or latest_state.get("game_id") != st.session_state.get("game_id")
     ):
         st.rerun()
+    if is_room_expired(latest_state):
+        close_expired_room()
     waiting_name = latest_state["p1_name" if role == "Player 2" else "p2_name"]
-    if show_addition_board:
-        board_column, waiting_column = st.columns([2, 1])
-        with board_column:
-            st.html(addition_board_html(latest_state, MYSTERY_SPOTS))
-        with waiting_column:
-            st.warning(f"รอ {waiting_name} เล่น")
-    else:
-        st.warning(f"รอ {waiting_name} เล่น")
+    board_column, waiting_column = st.columns([2, 1])
+    board_column.html(game_board_html(latest_state, MYSTERY_SPOTS))
+    with waiting_column, st.container(border=True):
+        st.subheader("รอคู่แข่ง")
+        st.write(f"{waiting_name} กำลังเล่น")
 
 
 if "room_id" not in st.session_state:
-    st.title(APP_NAME)
+    st.html('<header class="battle-hero"><h1>Inequality Battle</h1><p>ตะลุยโลกอสมการ</p></header>')
     if "home_notice" in st.session_state:
         st.warning(st.session_state.pop("home_notice"))
-    st.subheader("เลือกเนื้อหาก่อนเริ่มเกม")
-    topic = st.radio(
-        "เนื้อหา",
-        options=list(TOPICS),
-        format_func=lambda key: TOPICS[key],
-        label_visibility="collapsed",
-    )
-    col_left, col_main, col_right = st.columns([1, 2, 1])
-    with col_main:
+    with st.container(border=True, key="battle-lobby"):
+        st.subheader("เลือกบทและเข้าห้อง")
+        topic = st.radio(
+            "เนื้อหา",
+            options=list(TOPICS),
+            format_func=lambda key: TOPICS[key],
+            label_visibility="collapsed",
+        )
         room_input = st.text_input("ชื่อห้อง")
         name_input = st.text_input("ชื่อผู้เล่น")
         if st.button("เข้าสู่ห้อง", type="primary", use_container_width=True):
@@ -474,8 +472,8 @@ if state.get("p1_reset_req") and state.get("p2_reset_req"):
     reset_game(topic)
     st.rerun()
 
-st.title(APP_NAME)
-st.caption(f"เนื้อหา: {TOPICS[topic]}")
+st.title("Inequality Battle")
+st.caption(f"ห้อง {st.session_state.room_id} · {TOPICS[topic]}")
 
 if state.get("winner"):
     st.balloons()
@@ -486,6 +484,10 @@ if state.get("winner"):
     history = state[history_key]
     if not state[saved_key]:
         save_room_results(state, "จบเกม", roles=[role])
+    st.subheader("สรุปผลของคุณ")
+    answered, correct = st.columns(2)
+    answered.metric("ตอบทั้งหมด", len(history))
+    correct.metric("ตอบถูก", sum(row["ผล"] == "ถูก" for row in history))
     st.dataframe(history, use_container_width=True)
     if st.button("เริ่มเกมใหม่"):
         reset_game(topic)
@@ -494,11 +496,11 @@ if state.get("winner"):
 
 header_main, header_refresh, header_reset, header_timeout = st.columns([3, 1, 1, 1])
 with header_main:
-    st.subheader(f"{my_name} ({role})")
     level_key = "p1_level" if role == "Player 1" else "p2_level"
-    st.write(
-        f"ระดับ: {state[level_key]}/{get_max_level(topic)} | "
-        f"โล่: {my_items['shield']} | แว่นขยาย: {my_items['glass']}"
+    st.html(
+        f'<div class="battle-meta"><strong>{escape(my_name)}</strong> · {role}'
+        f'<p>ระดับ {state[level_key]}/{get_max_level(topic)} · '
+        f'โล่ {my_items["shield"]} · แว่นขยาย {my_items["glass"]}</p></div>'
     )
 with header_refresh:
     if st.button("รีเฟรช", use_container_width=True):
@@ -518,37 +520,14 @@ with header_timeout:
             return_to_home("บันทึกผลและปิดห้องแล้ว รหัสห้องนี้พร้อมใช้สำหรับเกมใหม่")
         st.error("ยังปิดห้องไม่ได้ เพราะบันทึกผลไม่สำเร็จ กรุณาตรวจการตั้งค่า Google Sheets")
 
-if topic == "addition" and state["turn"] != role:
-    render_waiting_panel(role, show_addition_board=True)
+if state["turn"] != role:
+    render_waiting_panel(role)
     st.stop()
 
 board, action = st.columns([2, 1])
-if topic == "addition":
-    board.html(addition_board_html(state, MYSTERY_SPOTS))
-else:
-    with board:
-        current_name = p1_name if state["turn"] == "Player 1" else p2_name
-        st.write(f"ตาของ: **{current_name}**")
-        for row in range(8):
-            cells = st.columns(8)
-            for column in range(8):
-                index = row * 8 + column
-                p1_here = state["p1_pos"] == index
-                p2_here = state["p2_pos"] == index
-                label = "🏁" if index == 63 else ("🎁" if index in MYSTERY_SPOTS else str(index + 1))
-                if p1_here and p2_here:
-                    label = "🟣"
-                elif p1_here:
-                    label = "🔴"
-                elif p2_here:
-                    label = "🔵"
-                cells[column].button(label, key=f"board_{index}", disabled=True)
+board.html(game_board_html(state, MYSTERY_SPOTS))
 
-with action:
-    if state["turn"] != role:
-        render_waiting_panel(role)
-        st.stop()
-
+with action, st.container(border=True, key="battle-action"):
     phase = state.get("game_phase", "READY")
     if phase == "READY":
         st.markdown("### ถึงตาคุณแล้ว")
@@ -569,7 +548,7 @@ with action:
             st.rerun()
 
     elif phase == "ROLLED":
-        st.info(f"ทอยได้: {state['last_roll']}")
+        st.html(f'<div class="battle-roll"><strong>{state["last_roll"]}</strong><span>แต้มที่ทอยได้</span></div>')
         if st.button("เปิดโจทย์", type="primary", use_container_width=True):
             level_key = "p1_level" if role == "Player 1" else "p2_level"
             question, choices = get_q_and_choices(topic, state[level_key])
