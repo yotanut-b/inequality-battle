@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from addition_board import GAME_STYLE, game_board_html, hero_html, item_html, pawn_html
+from addition_board import GAME_STYLE, PLAYER_ANIMALS, game_board_html, hero_html, item_html, pawn_html
 
 try:
     from google import genai
@@ -439,9 +439,10 @@ if "my_role" not in st.session_state:
     if state.get("topic") and state["topic"] != selected_topic:
         st.error(f"ห้องนี้กำลังเล่นเนื้อหา: {TOPICS[state['topic']]}")
         st.stop()
-    st.subheader("เลือกตัวหมาก")
+    st.subheader("เลือกตัวละคร")
     col_1, col_2 = st.columns(2)
-    for seat, column, piece in ((1, col_1, "คริสตัลฟ้า"), (2, col_2, "คริสตัลชมพู")):
+    for seat, column in enumerate((col_1, col_2), start=1):
+        piece = PLAYER_ANIMALS[seat]
         seat_role = f"Player {seat}"
         seat_name = state[f"p{seat}_name"]
         seat_status = "ว่าง" if seat_name == seat_role else seat_name
@@ -568,7 +569,7 @@ with action, st.container(border=True, key="battle-action"):
         if state.get("last_roll_item") in ("shield", "glass"):
             gift = state["last_roll_item"]
             gift_name = "โล่" if gift == "shield" else "แว่นขยาย"
-            st.html(item_html(gift, f"ได้{gift_name}จากหีบสมบัติ"))
+            st.html(item_html(gift, f"ได้{gift_name}จากหีบเสบียง"))
         if st.button("เปิดโจทย์", type="primary", use_container_width=True):
             level_key = "p1_level" if role == "Player 1" else "p2_level"
             question, choices = get_q_and_choices(topic, state[level_key])
