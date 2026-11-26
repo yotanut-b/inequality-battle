@@ -9,12 +9,7 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, hero_html, item_html, pawn_html
-
-try:
-    from google import genai
-except ImportError:
-    genai = None
+from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, hero_html, item_html, pawn_html, walk_duration
 
 try:
     import gspread
@@ -125,8 +120,6 @@ def get_initial_state(topic=None):
         "p2_level": 1,
         "last_roll": 0,
         "old_pos": 0,
-        "ai_feedback": "",
-        "ai_feedback_source": "",
         "p1_items": {"shield": 0, "glass": 0},
         "p2_items": {"shield": 0, "glass": 0},
         "winner": None,
@@ -347,21 +340,49 @@ def save_room_results(state, status, roles=None, show_warning=True):
     return saved_all
 
 
-def get_ai_response(question, answer, selected):
-    fallback = "ลองพิจารณาว่าต้องทำอะไรกับทั้งสองข้างของอสมการ และตรวจสอบเครื่องหมายอีกครั้ง"
-    if not genai or "GENAI_API_KEY" not in st.secrets:
-        return fallback, "ข้อความสำรอง: ยังไม่ได้เชื่อมต่อ Gemini"
-    try:
-        client = genai.Client(api_key=st.secrets["GENAI_API_KEY"])
-        prompt = (
-            f"โจทย์: {question}\nเฉลย: {answer}\nนักเรียนตอบ: {selected}\n"
-            "อธิบายวิธีคิดที่ถูกต้องเป็นภาษาไทยแบบกระชับสำหรับนักเรียนมัธยม "
-            "ใช้ไม่เกิน 4 ประโยค และอธิบายให้ตรงกับโจทย์ข้อนี้"
+def fresh_walk(state):
+    move = state.get("trail_move")
+    if not move or (state.get("game_phase") not in ("ROLLED", "ANSWERING") and not state.get("winner")):
+        return None
+    if time.time() - move["at"] > 10 or st.session_state.get("seen_trail_move") == move["id"]:
+        return None
+    st.session_state.seen_trail_move = move["id"]
+    return move
+
+
+def claim_seat(state, seat, topic, name):
+    key = f"p{seat}_name"
+    role = f"Player {seat}"
+
+    def can_join(latest):
+        return (
+            latest.get("game_id") == state["game_id"]
+            and latest.get("topic") in (None, topic)
+            and latest.get(key) in (role, name)
+            and (not latest.get("winner") or latest.get(key) == name)
+            and not is_room_expired(latest)
         )
-        response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-        return response.text, "AI Feedback จาก Gemini"
-    except Exception as error:
-        return fallback, f"ข้อความสำรอง: Gemini ใช้งานไม่สำเร็จ ({type(error).__name__})"
+
+    db = get_firestore_db()
+    if db is None:
+        latest = get_db()
+        if not can_join(latest):
+            return False
+        latest.update({"topic": topic, key: name})
+        update_db(latest)
+        return True
+
+    room = db.collection("rooms").document(get_room_id())
+
+    @firestore.transactional
+    def claim(transaction):
+        snapshot = room.get(transaction=transaction)
+        if not snapshot.exists or not can_join(snapshot.to_dict()):
+            return False
+        transaction.update(room, {"topic": topic, key: name, "last_activity_at": time.time()})
+        return True
+
+    return claim(db.transaction())
 
 
 def render_formula(text, latex=None):
@@ -393,7 +414,7 @@ def render_waiting_panel(role):
         close_expired_room()
     waiting_name = latest_state["p1_name" if role == "Player 2" else "p2_name"]
     board_column, waiting_column = st.columns([2, 1])
-    board_column.html(game_board_html(latest_state, MYSTERY_SPOTS))
+    board_column.html(game_board_html(latest_state, MYSTERY_SPOTS, fresh_walk(latest_state)))
     with waiting_column, st.container(border=True):
         st.subheader("รอคู่แข่ง")
         st.write(f"{waiting_name} กำลังเล่น")
@@ -445,19 +466,25 @@ if "my_role" not in st.session_state:
         piece = PLAYER_ANIMALS[seat]
         seat_role = f"Player {seat}"
         seat_name = state[f"p{seat}_name"]
-        seat_status = "ว่าง" if seat_name == seat_role else seat_name
+        occupied = seat_name != seat_role
+        seat_status = f"เข้าห้องแล้ว · {seat_name}" if occupied else "ที่นั่งว่าง"
         with column, st.container(border=True, key=f"battle-seat-{seat}"):
             st.html(
                 f'<div class="battle-seat">{pawn_html(seat)}<div><strong>{piece}</strong>'
                 f'<small>ผู้เล่น {seat} · {escape(seat_status)}</small></div></div>'
             )
-            if st.button(f"เลือก{piece}", key=f"join-seat-{seat}", use_container_width=True):
-                st.session_state.my_role = seat_role
-                state["topic"] = selected_topic
-                state[f"p{seat}_name"] = st.session_state.player_name
-                update_db(state)
-                st.session_state.game_id = state["game_id"]
-                st.rerun()
+            seat_unavailable = (occupied or state.get("winner")) and seat_name != st.session_state.player_name
+            if st.button(
+                f"เลือก{piece}", key=f"join-seat-{seat}", use_container_width=True,
+                disabled=bool(seat_unavailable),
+            ):
+                if claim_seat(state, seat, selected_topic, st.session_state.player_name):
+                    st.session_state.my_role = seat_role
+                    st.session_state.game_id = state["game_id"]
+                    st.rerun()
+                st.warning("สถานะห้องเปลี่ยนแล้ว กรุณาอัปเดตที่นั่ง")
+    if st.button("อัปเดตที่นั่ง"):
+        st.rerun()
     st.stop()
 
 
@@ -485,19 +512,26 @@ st.html(
 )
 
 if state.get("winner"):
-    st.balloons()
     winner_name = p1_name if state["winner"] == "Player 1" else p2_name
-    st.success(f"เกมจบแล้ว ผู้ชนะคือ {winner_name}")
+    st.success(f"⛺ {winner_name} ถึงแคมป์แล้ว")
+    finish_board, finish_summary = st.columns([2, 1])
+    finish_board.html(game_board_html(state, MYSTERY_SPOTS, fresh_walk(state)))
     history_key = "p1_history" if role == "Player 1" else "p2_history"
     saved_key = "p1_saved" if role == "Player 1" else "p2_saved"
     history = state[history_key]
     if not state[saved_key]:
         save_room_results(state, "จบเกม", roles=[role])
-    st.subheader("สรุปผลของคุณ")
-    answered, correct = st.columns(2)
-    answered.metric("ตอบทั้งหมด", len(history))
-    correct.metric("ตอบถูก", sum(row["ผล"] == "ถูก" for row in history))
-    st.dataframe(history, use_container_width=True)
+    with finish_summary:
+        st.subheader("สรุปการเดินทาง")
+        answered, correct = st.columns(2)
+        answered.metric("ตอบทั้งหมด", len(history))
+        correct.metric("ตอบถูก", sum(row["ผล"] == "ถูก" for row in history))
+    mistakes = [row for row in history if row["ผล"] == "ผิด"]
+    if mistakes:
+        st.subheader("ข้อที่ควรกลับไปทบทวน")
+        st.dataframe(mistakes, use_container_width=True)
+    elif history:
+        st.success("คุณตอบถูกทุกข้อ")
     if st.button("เริ่มเกมใหม่"):
         reset_game(topic)
         st.rerun()
@@ -537,11 +571,13 @@ if state["turn"] != role:
     render_waiting_panel(role)
     st.stop()
 
-board, action = st.columns([2, 1])
-board.html(game_board_html(state, MYSTERY_SPOTS))
+phase = state.get("game_phase", "READY")
+with st.container(key="battle-question-layout" if phase == "ANSWERING" else "battle-play-layout"):
+    board, action = st.columns([2, 1])
+move = fresh_walk(state)
+board.html(game_board_html(state, MYSTERY_SPOTS, move))
 
 with action, st.container(border=True, key="battle-action"):
-    phase = state.get("game_phase", "READY")
     if phase == "READY":
         st.markdown("### ถึงตาคุณแล้ว")
         if st.button("ทอยลูกเต๋า", type="primary", use_container_width=True):
@@ -549,6 +585,10 @@ with action, st.container(border=True, key="battle-action"):
             position_key = "p1_pos" if role == "Player 1" else "p2_pos"
             state["old_pos"] = state[position_key]
             state[position_key] = min(state[position_key] + roll, 63)
+            state["trail_move"] = {
+                "id": uuid.uuid4().hex, "at": time.time(),
+                "player": player, "from": state["old_pos"], "to": state[position_key],
+            }
             state["last_roll"] = roll
             state["last_roll_item"] = None
             if state[position_key] in MYSTERY_SPOTS:
@@ -564,12 +604,16 @@ with action, st.container(border=True, key="battle-action"):
 
     elif phase == "ROLLED":
         roll = state["last_roll"]
-        st.html(f'<div class="battle-roll"><strong aria-hidden="true">{chr(0x2680 + roll - 1)}</strong>'
+        animation = " battle-roll-fresh" if move else ""
+        st.html(f'<div class="battle-roll{animation}"><strong aria-hidden="true">{chr(0x2680 + roll - 1)}</strong>'
                 f'<span>ทอยได้ <b>{roll}</b> แต้ม</span></div>')
         if state.get("last_roll_item") in ("shield", "glass"):
             gift = state["last_roll_item"]
-            gift_name = "โล่" if gift == "shield" else "แว่นขยาย"
-            st.html(item_html(gift, f"ได้{gift_name}จากหีบเสบียง"))
+            gift_label = "โล่ · ป้องกันการถอย 1 ครั้ง" if gift == "shield" else "แว่นขยาย · ตัดตัวเลือกผิด 1 ข้อ"
+            reward = item_html(gift, gift_label)
+            if move:
+                reward = f'<div class="battle-reward-fresh" style="--walk-duration:{walk_duration(move)}ms">{reward}</div>'
+            st.html(reward)
         if st.button("เปิดโจทย์", type="primary", use_container_width=True):
             level_key = "p1_level" if role == "Player 1" else "p2_level"
             question, choices = get_q_and_choices(topic, state[level_key])
@@ -614,22 +658,21 @@ with action, st.container(border=True, key="battle-action"):
                 else:
                     level_key = "p1_level" if role == "Player 1" else "p2_level"
                     state[level_key] = max(1, state[level_key] - 1)
-                    if my_items["shield"] > 0:
+                    state["shield_used"] = my_items["shield"] > 0
+                    if state["shield_used"]:
                         state[my_items_key]["shield"] -= 1
                     else:
                         position_key = "p1_pos" if role == "Player 1" else "p2_pos"
                         state[position_key] = max(0, state["old_pos"] - 3)
-                    state["ai_feedback"], state["ai_feedback_source"] = get_ai_response(
-                        question["text"], question["answer"], choice["value"]
-                    )
                     state["game_phase"] = "FEEDBACK"
                 update_db(state)
                 st.rerun()
 
     elif phase == "FEEDBACK":
         st.error("ตอบผิด")
-        st.caption(state.get("ai_feedback_source", "ข้อความสำรอง"))
-        st.info(state["ai_feedback"])
+        st.caption(f"ระดับปัจจุบัน {state[level_key]}/{get_max_level(topic)}")
+        if state.get("shield_used"):
+            st.html(item_html("shield", "ใช้โล่แล้ว · อยู่ช่องเดิม"))
         if st.button("จบตา", type="primary", use_container_width=True):
             state["turn"] = other_role
             state["game_phase"] = "READY"

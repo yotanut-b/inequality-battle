@@ -72,6 +72,11 @@ GAME_STYLE = """
   border: 1px solid #5f3420; box-shadow: 0 2px #39251c35;
 }
 .battle-chest::after { content: ""; position: absolute; inset: 39% 40% 20%; border-radius: 2px; background: #ffe59d; }
+.battle-chest::before {
+  content: ""; position: absolute; inset: -1px -1px 55%; border-radius: .16em .16em .04em .04em;
+  border: 1px solid #5f3420; background: linear-gradient(150deg,#efb56b,#a65a2b);
+  transform-origin: top left;
+}
 .battle-room {
   padding: 1.1rem 1.3rem; border-radius: 18px; color: #f9f5e2;
   background: radial-gradient(ellipse at top right,#5a7750,#203a2b 68%);
@@ -123,6 +128,12 @@ GAME_STYLE = """
 .battle-board .trail-down::before { top: 100%; height: var(--tile-gap); width: 2px; }
 .battle-board .trail-item { background: linear-gradient(145deg,#ffe8ab,#d9a953); color: #422a02; }
 .battle-board .trail-end { background: linear-gradient(135deg,#fff4cf,var(--accent)); color: #243624; }
+.battle-board .trail-creek {
+  background: repeating-linear-gradient(160deg,#ffffff23 0 2px,transparent 3px 9px), #a2cfc5;
+}
+.battle-board .trail-bridge {
+  background: repeating-linear-gradient(0deg,#784b2d55 0 2px,transparent 3px 9px), #e3be8d;
+}
 .battle-board .trail-icon { display: grid; place-items: center; line-height: 1; }
 .battle-board .trail-icon:empty { display: none; }
 .battle-board .trail-item .trail-number, .battle-board .trail-end .trail-number, .battle-board .trail-occupied .trail-number {
@@ -134,7 +145,37 @@ GAME_STYLE = """
   position: relative; display: inline-grid; place-items: center; width: 1.2em; height: 1.2em;
   line-height: 1; vertical-align: middle; flex: none;
 }
+.trail-pawn img { width: 100%; height: 100%; object-fit: contain; }
+.battle-seat .trail-pawn { width: 1.65em; height: 1.65em; }
 .battle-board .trail-pawn { font-size: clamp(.72rem, 2.25vw, 1.3rem); }
+.trail-moving {
+  position: absolute; inset: 0; display: grid; place-items: center; z-index: 2;
+  pointer-events: none;
+  animation: trail-walk var(--walk-duration) linear both;
+}
+.trail-arriving { animation: trail-arrive var(--walk-duration) steps(1, end) both; }
+.trail-opening .battle-chest {
+  transform-origin: bottom; animation: trail-chest .48s ease-out var(--walk-duration) both;
+}
+.trail-opening .battle-chest::before { animation: trail-lid .48s ease-out var(--walk-duration) both; }
+.battle-roll.battle-roll-fresh strong { animation: trail-dice .48s ease-out both; }
+.battle-reward-fresh { animation: trail-reward .35s ease-out var(--walk-duration) both; }
+@keyframes trail-arrive { from { opacity: 0; } to { opacity: 1; } }
+@keyframes trail-chest { 45% { transform: translateY(-.25em) rotate(-16deg) scale(1.24); filter: brightness(1.55); } }
+@keyframes trail-lid { to { transform: rotate(-42deg) translateY(-.15em); } }
+@keyframes trail-dice { from { transform: rotate(-170deg) scale(.65); } 75% { transform: rotate(14deg) scale(1.12); } }
+@keyframes trail-reward { from { opacity: 0; transform: translateY(.4rem); } }
+@media (prefers-reduced-motion: reduce) {
+  .trail-moving { display: none; }
+  .trail-arriving, .trail-opening .battle-chest, .trail-opening .battle-chest::before,
+  .battle-roll.battle-roll-fresh strong, .battle-reward-fresh {
+    animation: none;
+  }
+}
+@media (max-width: 640px) {
+  .st-key-battle-question-layout [data-testid="stHorizontalBlock"] { flex-direction: column-reverse; }
+  .st-key-battle-question-layout [data-testid="stColumn"] { width: 100%; }
+}
 .battle-board .trail-occupied { box-shadow: inset 0 0 0 2px #284c32, inset 0 1px #ffffff40; }
 .battle-board footer { padding: .75rem .85rem; font-size: clamp(1.05rem, 1rem + .35vw, 1.3rem); }
 .battle-board .trail-players { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; }
@@ -182,32 +223,60 @@ def game_style_html():
 """
 
 
-@lru_cache(maxsize=1)
-def _hero_image():
-    path = Path(__file__).with_name("forest-trail.webp")
-    if not path.is_file():
-        return ""
-    data = b64encode(path.read_bytes()).decode("ascii")
-    return f'<img src="data:image/webp;base64,{data}" alt="">'
+@lru_cache(maxsize=3)
+def _image_src(filename):
+    path = Path(__file__).with_name(filename)
+    return "data:image/webp;base64," + b64encode(path.read_bytes()).decode("ascii") if path.is_file() else ""
 
 
 def hero_html():
+    src = _image_src("forest-trail.webp")
     return (
-        '<header class="battle-hero">' + _hero_image()
+        '<header class="battle-hero">' + (f'<img src="{src}" alt="">' if src else "")
         + '<h1>Inequality Battle</h1><p>ตะลุยโลกอสมการ</p></header>'
     )
 
 
-def pawn_html(player):
+def pawn_html(player, arriving=False):
     animal = "🦊" if player == 1 else "🐰"
-    return f'<span class="trail-pawn trail-p{player}" aria-hidden="true">{animal}</span>'
+    src = _image_src("trail-fox.webp" if player == 1 else "trail-rabbit.webp")
+    contents = f'<img src="{src}" alt="">' if src else animal
+    arrival = " trail-arriving" if arriving else ""
+    return f'<span class="trail-pawn trail-p{player}{arrival}" aria-hidden="true">{contents}</span>'
 
 
 def item_html(item, label):
     return f'<span class="battle-chip"><i class="battle-icon battle-{item}" aria-hidden="true"></i>{escape(label)}</span>'
 
 
-def game_board_html(state, mystery_spots):
+def walk_duration(move):
+    return 480 + 155 * (move["to"] - move["from"])
+
+
+def walk_style(move):
+    start = move["from"]
+    end = move["to"]
+
+    def coordinates(index):
+        row, column = divmod(index, 8)
+        return row, column if row % 2 == 0 else 7 - column
+
+    row_start, col_start = coordinates(start)
+    duration = walk_duration(move)
+    frames = ["0% { transform: translate(0,0); }", f"{480 / duration * 100:.3f}% {{ transform: translate(0,0); }}"]
+    for step, index in enumerate(range(start + 1, end + 1), start=1):
+        row, col = coordinates(index)
+        x, y = col - col_start, row - row_start
+        progress = min(99.9, (480 + 155 * step) / duration * 100)
+        frames.append(
+            f"{progress:.3f}% {{ transform: translate(calc({x * 100}% + {x} * var(--tile-gap)),"
+            f"calc({y * 100}% + {y} * var(--tile-gap))); }}"
+        )
+    frames.append("100% { opacity: 0; }")
+    return "<style>@keyframes trail-walk { " + " ".join(frames) + " }</style>"
+
+
+def game_board_html(state, mystery_spots, move=None):
     positions = (state["p1_pos"], state["p2_pos"])
     names = (state["p1_name"], state["p2_name"])
     current_player = 1 if state["turn"] == "Player 1" else 2
@@ -234,12 +303,23 @@ def game_board_html(state, mystery_spots):
                 classes.append("trail-item")
                 labels.append("หีบเสบียง")
                 icon = '<i class="battle-icon battle-chest"></i>'
+                if move and move["to"] == index and state.get("last_roll_item"):
+                    classes.append("trail-opening")
+            elif row == 3:
+                classes.append("trail-bridge")
+            elif row in (2, 4):
+                classes.append("trail-creek")
 
             pawns = ""
             if occupants:
                 classes.append("trail-occupied")
                 labels.extend(f"ผู้เล่น {player} {PLAYER_ANIMALS[player]}" for player in occupants)
-                pawns = '<span class="trail-pawns">' + "".join(map(pawn_html, occupants)) + "</span>"
+                pawns = '<span class="trail-pawns">' + "".join(
+                    pawn_html(player, arriving=bool(move and player == move["player"]))
+                    for player in occupants
+                ) + "</span>"
+            if move and index == move["from"]:
+                pawns += f'<span class="trail-moving" aria-hidden="true">{pawn_html(move["player"])}</span>'
             tiles.append(
                 f'<div class="{" ".join(classes)}" role="img" aria-label="{escape(" · ".join(labels))}">'
                 f'<span class="trail-number">{index + 1}</span>'
@@ -254,10 +334,12 @@ def game_board_html(state, mystery_spots):
         f' · ระดับ {state[f"p{player}_level"]} · {PLAYER_ANIMALS[player]}</small></div>'
         for player in (1, 2)
     )
+    motion = f' style="--walk-duration:{walk_duration(move)}ms"' if move else ""
     return (
-        f'<section class="battle-board battle-{theme}" aria-label="กระดานเกม">'
+        (walk_style(move) if move else "")
+        + f'<section class="battle-board battle-{theme}" aria-label="กระดานเกม"{motion}>'
         + f'<header><h2>กระดานเกม</h2><p class="trail-turn">ตาของ {escape(current_name)}</p></header>'
         + f'<div class="trail-grid">{"".join(tiles)}</div>'
         + f'<footer><div class="trail-players">{players}</div>'
-        + '<p class="trail-legend">▶ เริ่ม · <i class="battle-icon battle-chest" aria-hidden="true"></i> หีบเสบียง · ⛺ จุดตั้งแคมป์</p></footer></section>'
+        + '<p class="trail-legend">▶ เริ่ม · สะพานไม้ · <i class="battle-icon battle-chest" aria-hidden="true"></i> หีบเสบียง · ⛺ จุดตั้งแคมป์</p></footer></section>'
     )
