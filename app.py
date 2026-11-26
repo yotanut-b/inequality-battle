@@ -8,6 +8,8 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
+from addition_board import addition_board_html
+
 try:
     from google import genai
 except ImportError:
@@ -377,7 +379,7 @@ def render_choice(choice, index):
 
 
 @st.fragment(run_every=3)
-def render_waiting_panel(role, p1_name, p2_name):
+def render_waiting_panel(role, show_addition_board=False):
     latest_state = get_db()
     if is_room_expired(latest_state):
         close_expired_room()
@@ -387,8 +389,15 @@ def render_waiting_panel(role, p1_name, p2_name):
         or latest_state.get("game_id") != st.session_state.get("game_id")
     ):
         st.rerun()
-    waiting_name = p1_name if role == "Player 2" else p2_name
-    st.warning(f"รอ {waiting_name} เล่น")
+    waiting_name = latest_state["p1_name" if role == "Player 2" else "p2_name"]
+    if show_addition_board:
+        board_column, waiting_column = st.columns([2, 1])
+        with board_column:
+            st.html(addition_board_html(latest_state, MYSTERY_SPOTS))
+        with waiting_column:
+            st.warning(f"รอ {waiting_name} เล่น")
+    else:
+        st.warning(f"รอ {waiting_name} เล่น")
 
 
 if "room_id" not in st.session_state:
@@ -509,28 +518,35 @@ with header_timeout:
             return_to_home("บันทึกผลและปิดห้องแล้ว รหัสห้องนี้พร้อมใช้สำหรับเกมใหม่")
         st.error("ยังปิดห้องไม่ได้ เพราะบันทึกผลไม่สำเร็จ กรุณาตรวจการตั้งค่า Google Sheets")
 
+if topic == "addition" and state["turn"] != role:
+    render_waiting_panel(role, show_addition_board=True)
+    st.stop()
+
 board, action = st.columns([2, 1])
-with board:
-    current_name = p1_name if state["turn"] == "Player 1" else p2_name
-    st.write(f"ตาของ: **{current_name}**")
-    for row in range(8):
-        cells = st.columns(8)
-        for column in range(8):
-            index = row * 8 + column
-            p1_here = state["p1_pos"] == index
-            p2_here = state["p2_pos"] == index
-            label = "🏁" if index == 63 else ("🎁" if index in MYSTERY_SPOTS else str(index + 1))
-            if p1_here and p2_here:
-                label = "🟣"
-            elif p1_here:
-                label = "🔴"
-            elif p2_here:
-                label = "🔵"
-            cells[column].button(label, key=f"board_{index}", disabled=True)
+if topic == "addition":
+    board.html(addition_board_html(state, MYSTERY_SPOTS))
+else:
+    with board:
+        current_name = p1_name if state["turn"] == "Player 1" else p2_name
+        st.write(f"ตาของ: **{current_name}**")
+        for row in range(8):
+            cells = st.columns(8)
+            for column in range(8):
+                index = row * 8 + column
+                p1_here = state["p1_pos"] == index
+                p2_here = state["p2_pos"] == index
+                label = "🏁" if index == 63 else ("🎁" if index in MYSTERY_SPOTS else str(index + 1))
+                if p1_here and p2_here:
+                    label = "🟣"
+                elif p1_here:
+                    label = "🔴"
+                elif p2_here:
+                    label = "🔵"
+                cells[column].button(label, key=f"board_{index}", disabled=True)
 
 with action:
     if state["turn"] != role:
-        render_waiting_panel(role, p1_name, p2_name)
+        render_waiting_panel(role)
         st.stop()
 
     phase = state.get("game_phase", "READY")
