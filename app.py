@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from addition_board import GAME_STYLE, PLAYER_ANIMALS, game_board_html, hero_html, item_html, pawn_html
+from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, hero_html, item_html, pawn_html
 
 try:
     from google import genai
@@ -43,7 +43,7 @@ TOPICS = {
 }
 
 st.set_page_config(page_title=APP_NAME, page_icon="📝", layout="wide")
-st.html(GAME_STYLE)
+st.html(game_style_html())
 
 
 @st.cache_data

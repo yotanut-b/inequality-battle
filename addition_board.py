@@ -128,6 +128,37 @@ GAME_STYLE = """
 
 
 @lru_cache(maxsize=1)
+def game_style_html():
+    path = Path(__file__).with_name("ChulaCharasNewReg.ttf")
+    if not path.is_file():
+        return GAME_STYLE
+    data = b64encode(path.read_bytes()).decode("ascii")
+    return GAME_STYLE + f"""
+<style>
+@font-face {{
+  font-family: "ChulaCharasNew";
+  src: url("data:font/ttf;base64,{data}") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}}
+[data-testid="stAppViewContainer"] {{
+  --battle-ui-font: "ChulaCharasNew", system-ui, sans-serif;
+  font-family: var(--battle-ui-font);
+}}
+[data-testid="stAppViewContainer"] :is(
+  h1, h2, h3, h4, h5, h6, button, input, textarea, label,
+  [data-testid="stMarkdownContainer"], [data-testid="stCaptionContainer"],
+  [data-testid="stMetric"], .battle-hero, .battle-room, .battle-seat,
+  .battle-meta, .battle-board, .battle-roll, .battle-chip
+) {{
+  font-family: var(--battle-ui-font);
+}}
+</style>
+"""
+
+
+@lru_cache(maxsize=1)
 def _hero_image():
     path = Path(__file__).with_name("forest-trail.webp")
     if not path.is_file():
