@@ -8,6 +8,30 @@ PLAYER_ANIMALS = {1: "หมาจิ้งจอก", 2: "กระต่าย
 
 GAME_STYLE = """
 <style>
+[data-testid="stAppViewContainer"] {
+  --battle-text-size: clamp(1.2rem, 1.1rem + .45vw, 1.45rem);
+}
+[data-testid="stAppViewContainer"] :is(
+  [data-testid="stMarkdownContainer"], [data-testid="stMarkdownContainer"] p,
+  [data-testid="stWidgetLabel"] p, [role="radiogroup"] p,
+  [data-testid="stTextInput"] input
+) {
+  font-size: var(--battle-text-size);
+  line-height: 1.4;
+}
+[data-testid="stAppViewContainer"] [data-testid="stCaptionContainer"] p {
+  font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem);
+  line-height: 1.35;
+}
+[data-testid="stAppViewContainer"] [data-testid="stButton"] button {
+  min-height: 2.8rem;
+  padding: .35rem .5rem;
+}
+[data-testid="stAppViewContainer"] [data-testid="stButton"] button p {
+  font-size: clamp(1.15rem, 1.05rem + .4vw, 1.35rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
 .battle-hero {
   position: relative; isolation: isolate; overflow: hidden;
   display: grid; align-content: center; min-height: clamp(13rem, 31vw, 24rem);
@@ -23,15 +47,15 @@ GAME_STYLE = """
   content: ""; position: absolute; z-index: -1; inset: 0;
   background: linear-gradient(90deg,#10251deb,#10251d98 40%,#10251d0b 76%);
 }
-.battle-hero h1 { color: inherit; padding: 0; font-size: clamp(1.8rem, 5vw, 3.5rem); line-height: 1.15; }
-.battle-hero p { margin: .45rem 0 0; color: #e3efc9; font-size: clamp(1rem, 3vw, 1.45rem); }
-.battle-meta { margin: .25rem 0; overflow-wrap: anywhere; }
-.battle-meta strong { font-size: 1.1rem; }
+.battle-hero h1 { color: inherit; padding: 0; font-size: clamp(2.45rem, 6vw, 4.35rem); line-height: 1.15; }
+.battle-hero p { margin: .45rem 0 0; color: #e3efc9; font-size: clamp(1.35rem, 3.4vw, 1.9rem); }
+.battle-meta { margin: .25rem 0; overflow-wrap: anywhere; font-size: var(--battle-text-size); }
+.battle-meta strong { font-size: 1.2em; }
 .battle-meta p { margin: .2rem 0 0; }
 .battle-inventory { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
 .battle-chip {
   display: inline-flex; align-items: center; gap: .35rem; padding: .24rem .6rem;
-  border-radius: 999px; background: #244938; color: #f4f5e6; font-size: .82rem;
+  border-radius: 999px; background: #244938; color: #f4f5e6; font-size: 1.1rem;
 }
 .battle-icon { position: relative; display: inline-block; width: 1em; height: 1em; flex: none; }
 .battle-shield {
@@ -53,15 +77,16 @@ GAME_STYLE = """
   background: radial-gradient(ellipse at top right,#5a7750,#203a2b 68%);
 }
 .battle-room h1, .battle-room h2 { color: inherit; margin: 0; padding: 0; overflow-wrap: anywhere; }
-.battle-room p { margin: .35rem 0 0; color: #e2ebcf; overflow-wrap: anywhere; }
-.battle-seat { display: flex; align-items: center; gap: .75rem; margin-bottom: .65rem; }
+.battle-room p { margin: .35rem 0 0; color: #e2ebcf; overflow-wrap: anywhere; font-size: var(--battle-text-size); }
+.battle-seat { display: flex; align-items: center; gap: .75rem; margin-bottom: .65rem; font-size: var(--battle-text-size); }
 .battle-seat .trail-pawn { font-size: 2.1rem; }
 .battle-seat strong, .battle-seat small { display: block; overflow-wrap: anywhere; }
 .st-key-battle-lobby, .st-key-battle-action, .st-key-battle-seat-1, .st-key-battle-seat-2 { border-radius: 18px; }
 .st-key-battle-action [data-testid="stLatex"] {
   overflow-x: auto;
 }
-.battle-roll { display: flex; align-items: center; gap: .75rem; margin: 0 0 .7rem; }
+.st-key-battle-action [data-testid="stLatex"] .katex { font-size: 1.33em; }
+.battle-roll { display: flex; align-items: center; gap: .75rem; margin: 0 0 .7rem; font-size: var(--battle-text-size); }
 .battle-roll strong {
   display: grid; place-items: center; width: 2.6rem; aspect-ratio: 1;
   border-radius: .65rem; background: #e6edcf; color: #27402c; font-size: 1.45rem;
@@ -74,8 +99,8 @@ GAME_STYLE = """
 .battle-board.battle-multiplication { --accent: #f0ca8c; --tile-light: #eeddb7; --tile-dark: #c6af85; --frame: #64533a; }
 .battle-board.battle-linear { --accent: #a8ded7; --tile-light: #cce0d2; --tile-dark: #91b3a2; --frame: #345e53; }
 .battle-board header { padding: .85rem 1rem; border-bottom: 1px solid #ffffff23; }
-.battle-board h2 { margin: 0; padding: 0; color: inherit; font-size: 1.15rem; }
-.battle-board .trail-turn { margin: .2rem 0 0; color: var(--accent); overflow-wrap: anywhere; }
+.battle-board h2 { margin: 0; padding: 0; color: inherit; font-size: 1.5rem; }
+.battle-board .trail-turn { margin: .2rem 0 0; color: var(--accent); overflow-wrap: anywhere; font-size: var(--battle-text-size); }
 .battle-board .trail-grid {
   --tile-gap: clamp(3px, .85vw, 9px);
   display: grid; grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -87,7 +112,7 @@ GAME_STYLE = """
   position: relative; display: grid; place-items: center; aspect-ratio: 1;
   min-width: 0; border-radius: 26% 22% 28% 19%;
   background: linear-gradient(145deg,var(--tile-light),var(--tile-dark)); color: #203122;
-  font-size: clamp(.7rem, 2.2vw, .95rem); font-variant-numeric: tabular-nums;
+  font-size: clamp(.95rem, 2.4vw, 1.25rem); font-variant-numeric: tabular-nums;
   box-shadow: inset 0 2px #ffffff45, inset 0 -3px #26341d40, 0 2px 3px #0d1d1b60;
 }
 .battle-board .trail-tile:nth-child(3n) { border-radius: 20% 29% 18% 24%; }
@@ -101,7 +126,7 @@ GAME_STYLE = """
 .battle-board .trail-icon { display: grid; place-items: center; line-height: 1; }
 .battle-board .trail-icon:empty { display: none; }
 .battle-board .trail-item .trail-number, .battle-board .trail-end .trail-number, .battle-board .trail-occupied .trail-number {
-  position: absolute; inset: 1% auto auto 8%; font-size: .72em;
+  position: absolute; inset: 1% auto auto 8%; font-size: .72em; line-height: 1;
 }
 .battle-board .trail-occupied .trail-icon { position: absolute; right: 6%; top: 7%; font-size: .65em; }
 .battle-board .trail-pawns { display: flex; gap: 0; margin-top: 24%; }
@@ -111,15 +136,14 @@ GAME_STYLE = """
 }
 .battle-board .trail-pawn { font-size: clamp(.72rem, 2.25vw, 1.3rem); }
 .battle-board .trail-occupied { box-shadow: inset 0 0 0 2px #284c32, inset 0 1px #ffffff40; }
-.battle-board footer { padding: .75rem .85rem; font-size: .85rem; }
+.battle-board footer { padding: .75rem .85rem; font-size: clamp(1.05rem, 1rem + .35vw, 1.3rem); }
 .battle-board .trail-players { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; }
 .battle-board .trail-player { overflow-wrap: anywhere; padding: .4rem .5rem; border-radius: 9px; background: #2d5039; }
 .battle-board .trail-current { box-shadow: inset 0 -2px var(--accent); }
-.battle-board .trail-player small { display: block; color: #e1e9ce; margin-top: .15rem; }
+.battle-board .trail-player small { display: block; color: #e1e9ce; margin-top: .15rem; font-size: .9em; }
 .battle-board .trail-legend { margin: .7rem 0 0; color: #e1e9ce; }
 @media (max-width: 480px) {
   .battle-board header, .battle-board footer { padding: .6rem; }
-  .battle-board .trail-occupied .trail-number { font-size: .8em; }
   .battle-hero > img { object-position: 65% center; }
   .battle-board .trail-pawn { font-size: .7rem; }
 }
