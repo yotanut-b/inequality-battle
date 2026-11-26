@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import os
 import random
 import time
@@ -33,6 +34,7 @@ except ImportError:
 
 
 APP_NAME = "Inequality Battle: ตะลุยโลกอสมการ"
+GEMINI_MODEL = "gemini-4-hydrogen"
 Q_DIR = "questions"
 MYSTERY_SPOTS = [3, 11, 19, 27, 35, 43, 51, 59]
 ROOM_TIMEOUT_SECONDS = 3 * 60
@@ -348,7 +350,8 @@ def save_room_results(state, status, roles=None, show_warning=True):
 def get_ai_feedback(answer_record):
     fallback = "ลองตรวจอีกครั้งว่าต้องทำอะไรกับอสมการทั้งสองข้าง และควรกลับเครื่องหมายหรือไม่"
     if genai is None:
-        return fallback, "ข้อความสำรอง · Gemini ยังไม่พร้อมใช้งาน"
+        logging.warning("Gemini feedback unavailable: google-genai could not be imported")
+        return fallback, "ข้อความสำรอง · แอพยังเรียก Gemini ไม่ได้"
     try:
         api_key = st.secrets.get("GENAI_API_KEY")
         if not api_key:
@@ -363,15 +366,30 @@ def get_ai_feedback(answer_record):
         )
         with genai.Client(
             api_key=api_key,
-            http_options={"timeout": 8000, "retry_options": {"attempts": 1}},
+            http_options={"timeout": 15000, "retry_options": {"attempts": 1}},
         ) as client:
-            response = client.models.generate_content(model="gemini-4-hydrogen", contents=prompt)
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={"thinking_config": {"thinking_level": "LOW"}},
+            )
             feedback = (response.text or "").strip()
         if feedback:
             return feedback, "คำแนะนำจาก Gemini"
-    except Exception:
-        pass
-    return fallback, "ข้อความสำรอง · Gemini ยังไม่พร้อมใช้งาน"
+        logging.warning("Gemini feedback empty: model=%s", GEMINI_MODEL)
+        return fallback, "ข้อความสำรอง · Gemini ไม่ส่งคำแนะนำกลับมา"
+    except Exception as error:
+        code = getattr(error, "code", None)
+        code = code if isinstance(code, int) else None
+        logging.warning("Gemini feedback failed: model=%s error=%s code=%s",
+                        GEMINI_MODEL, type(error).__name__, code)
+        reason = {
+            401: "ยืนยัน API key ไม่สำเร็จ",
+            403: "โปรเจกต์ไม่มีสิทธิ์เรียก Gemini",
+            404: "โปรเจกต์นี้เรียกโมเดลที่ตั้งไว้ไม่ได้",
+            429: "Gemini ถึงขีดจำกัดการเรียกชั่วคราว",
+        }.get(code, "Gemini ยังไม่พร้อมใช้งาน")
+        return fallback, f"ข้อความสำรอง · {reason}"
 
 
 def fresh_walk(state):
