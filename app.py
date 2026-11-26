@@ -365,7 +365,7 @@ def get_ai_feedback(answer_record):
             api_key=api_key,
             http_options={"timeout": 8000, "retry_options": {"attempts": 1}},
         ) as client:
-            response = client.models.generate_content(model="gemini-3.5-flash-lite", contents=prompt)
+            response = client.models.generate_content(model="gemini-4-hydrogen", contents=prompt)
             feedback = (response.text or "").strip()
         if feedback:
             return feedback, "คำแนะนำจาก Gemini"
