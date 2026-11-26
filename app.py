@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from addition_board import GAME_STYLE, game_board_html
+from addition_board import GAME_STYLE, game_board_html, hero_html, item_html, pawn_html
 
 try:
     from google import genai
@@ -400,11 +400,12 @@ def render_waiting_panel(role):
 
 
 if "room_id" not in st.session_state:
-    st.html('<header class="battle-hero"><h1>Inequality Battle</h1><p>ตะลุยโลกอสมการ</p></header>')
+    st.html(hero_html())
     if "home_notice" in st.session_state:
         st.warning(st.session_state.pop("home_notice"))
     with st.container(border=True, key="battle-lobby"):
-        st.subheader("เลือกบทและเข้าห้อง")
+        st.subheader("เริ่มเล่น")
+        st.caption("ใช้รหัสเดียวกันกับคู่แข่งเพื่อเข้าห้องเดียวกัน")
         topic = st.radio(
             "เนื้อหา",
             options=list(TOPICS),
@@ -431,26 +432,31 @@ if "my_role" not in st.session_state:
         state = get_initial_state()
         update_db(state)
     selected_topic = st.session_state.selected_topic
-    st.header(f"ห้อง: {st.session_state.room_id}")
+    st.html(
+        f'<header class="battle-room"><h2>ห้อง {escape(st.session_state.room_id)}</h2>'
+        f'<p>{escape(TOPICS[selected_topic])}</p></header>'
+    )
     if state.get("topic") and state["topic"] != selected_topic:
         st.error(f"ห้องนี้กำลังเล่นเนื้อหา: {TOPICS[state['topic']]}")
         st.stop()
-    st.info(f"เนื้อหา: {TOPICS[selected_topic]}")
+    st.subheader("เลือกตัวหมาก")
     col_1, col_2 = st.columns(2)
-    if col_1.button(f"เลือก Player 1 (ปัจจุบัน: {state.get('p1_name', 'ว่าง')})"):
-        st.session_state.my_role = "Player 1"
-        state["topic"] = selected_topic
-        state["p1_name"] = st.session_state.player_name
-        update_db(state)
-        st.session_state.game_id = state["game_id"]
-        st.rerun()
-    if col_2.button(f"เลือก Player 2 (ปัจจุบัน: {state.get('p2_name', 'ว่าง')})"):
-        st.session_state.my_role = "Player 2"
-        state["topic"] = selected_topic
-        state["p2_name"] = st.session_state.player_name
-        update_db(state)
-        st.session_state.game_id = state["game_id"]
-        st.rerun()
+    for seat, column, piece in ((1, col_1, "คริสตัลฟ้า"), (2, col_2, "คริสตัลชมพู")):
+        seat_role = f"Player {seat}"
+        seat_name = state[f"p{seat}_name"]
+        seat_status = "ว่าง" if seat_name == seat_role else seat_name
+        with column, st.container(border=True, key=f"battle-seat-{seat}"):
+            st.html(
+                f'<div class="battle-seat">{pawn_html(seat)}<div><strong>{piece}</strong>'
+                f'<small>ผู้เล่น {seat} · {escape(seat_status)}</small></div></div>'
+            )
+            if st.button(f"เลือก{piece}", key=f"join-seat-{seat}", use_container_width=True):
+                st.session_state.my_role = seat_role
+                state["topic"] = selected_topic
+                state[f"p{seat}_name"] = st.session_state.player_name
+                update_db(state)
+                st.session_state.game_id = state["game_id"]
+                st.rerun()
     st.stop()
 
 
@@ -472,8 +478,10 @@ if state.get("p1_reset_req") and state.get("p2_reset_req"):
     reset_game(topic)
     st.rerun()
 
-st.title("Inequality Battle")
-st.caption(f"ห้อง {st.session_state.room_id} · {TOPICS[topic]}")
+st.html(
+    '<header class="battle-room"><h1>Inequality Battle</h1>'
+    f'<p>ห้อง {escape(st.session_state.room_id)} · {escape(TOPICS[topic])}</p></header>'
+)
 
 if state.get("winner"):
     st.balloons()
@@ -496,11 +504,15 @@ if state.get("winner"):
 
 header_main, header_refresh, header_reset, header_timeout = st.columns([3, 1, 1, 1])
 with header_main:
-    level_key = "p1_level" if role == "Player 1" else "p2_level"
+    player = 1 if role == "Player 1" else 2
+    level_key = f"p{player}_level"
     st.html(
-        f'<div class="battle-meta"><strong>{escape(my_name)}</strong> · {role}'
-        f'<p>ระดับ {state[level_key]}/{get_max_level(topic)} · '
-        f'โล่ {my_items["shield"]} · แว่นขยาย {my_items["glass"]}</p></div>'
+        f'<div class="battle-meta">{pawn_html(player)} <strong>{escape(my_name)}</strong>'
+        f'<p>ระดับ {state[level_key]}/{get_max_level(topic)}</p>'
+        '<div class="battle-inventory">'
+        + item_html("shield", f'โล่ {my_items["shield"]}')
+        + item_html("glass", f'แว่นขยาย {my_items["glass"]}')
+        + "</div></div>"
     )
 with header_refresh:
     if st.button("รีเฟรช", use_container_width=True):
@@ -537,9 +549,11 @@ with action, st.container(border=True, key="battle-action"):
             state["old_pos"] = state[position_key]
             state[position_key] = min(state[position_key] + roll, 63)
             state["last_roll"] = roll
+            state["last_roll_item"] = None
             if state[position_key] in MYSTERY_SPOTS:
                 gift = random.choice(["shield", "glass"])
                 state[my_items_key][gift] += 1
+                state["last_roll_item"] = gift
             if state[position_key] == 63:
                 state["winner"] = role
             else:
@@ -548,7 +562,13 @@ with action, st.container(border=True, key="battle-action"):
             st.rerun()
 
     elif phase == "ROLLED":
-        st.html(f'<div class="battle-roll"><strong>{state["last_roll"]}</strong><span>แต้มที่ทอยได้</span></div>')
+        roll = state["last_roll"]
+        st.html(f'<div class="battle-roll"><strong aria-hidden="true">{chr(0x2680 + roll - 1)}</strong>'
+                f'<span>ทอยได้ <b>{roll}</b> แต้ม</span></div>')
+        if state.get("last_roll_item") in ("shield", "glass"):
+            gift = state["last_roll_item"]
+            gift_name = "โล่" if gift == "shield" else "แว่นขยาย"
+            st.html(item_html(gift, f"ได้{gift_name}จากหีบสมบัติ"))
         if st.button("เปิดโจทย์", type="primary", use_container_width=True):
             level_key = "p1_level" if role == "Player 1" else "p2_level"
             question, choices = get_q_and_choices(topic, state[level_key])
