@@ -5,6 +5,7 @@ import os
 import random
 import time
 import uuid
+from base64 import b64encode
 from html import escape
 from pathlib import Path
 from threading import RLock
@@ -14,7 +15,7 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, hero_html, item_html, pawn_html, walk_duration
+from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, item_html, pawn_html, walk_duration
 
 try:
     import gspread
@@ -550,6 +551,19 @@ def claim_seat(state, seat, topic, name):
     return claim(db.transaction())
 
 
+@st.cache_data
+def home_hero_html():
+    cover = Path(__file__).with_name("forest-trail.webp")
+    image = ""
+    if cover.is_file():
+        data = b64encode(cover.read_bytes()).decode("ascii")
+        image = f'<img src="data:image/webp;base64,{data}" alt="">'
+    return (
+        f'<header class="battle-hero">{image}'
+        f'<h1>{escape(APP_NAME)}</h1><p>{escape(APP_SUBTITLE)}</p></header>'
+    )
+
+
 def render_formula(text, latex=None):
     if latex:
         st.latex(latex)
@@ -628,7 +642,7 @@ def render_waiting_panel(role):
 
 
 if "room_id" not in st.session_state:
-    st.html(hero_html(APP_NAME, APP_SUBTITLE))
+    st.html(home_hero_html())
     if "home_notice" in st.session_state:
         st.warning(st.session_state.pop("home_notice"))
     with st.container(border=True, key="battle-lobby"):
