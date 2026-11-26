@@ -12,6 +12,11 @@ import streamlit as st
 from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, hero_html, item_html, pawn_html, walk_duration
 
 try:
+    from google import genai
+except ImportError:
+    genai = None
+
+try:
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
 except ImportError:
@@ -338,6 +343,35 @@ def save_room_results(state, status, roles=None, show_warning=True):
             saved_all = state[saved_key] and saved_all
     finish_room_result_save(state)
     return saved_all
+
+
+def get_ai_feedback(answer_record):
+    fallback = "ลองตรวจอีกครั้งว่าต้องทำอะไรกับอสมการทั้งสองข้าง และควรกลับเครื่องหมายหรือไม่"
+    if genai is None:
+        return fallback, "ข้อความสำรอง · Gemini ยังไม่พร้อมใช้งาน"
+    try:
+        api_key = st.secrets.get("GENAI_API_KEY")
+        if not api_key:
+            return fallback, "ข้อความสำรอง · ยังไม่ได้ตั้งค่า Gemini"
+        prompt = (
+            f"โจทย์: {answer_record['โจทย์']}\n"
+            f"คำตอบที่เลือก: {answer_record['ตอบ']}\n"
+            f"เฉลยที่ตรวจแล้ว: {answer_record['เฉลย']}\n"
+            "ให้คำแนะนำภาษาไทย 1 ถึง 2 ประโยคสำหรับนักเรียนมัธยม "
+            "ชี้จุดที่ควรตรวจจากโจทย์และคำตอบที่เลือก โดยยึดเฉลยที่ให้มา "
+            "ใช้ข้อความธรรมดาและไม่ต้องแจกแจงวิธีทำเต็มข้อ"
+        )
+        with genai.Client(
+            api_key=api_key,
+            http_options={"timeout": 8000, "retry_options": {"attempts": 1}},
+        ) as client:
+            response = client.models.generate_content(model="gemini-3.5-flash-lite", contents=prompt)
+            feedback = (response.text or "").strip()
+        if feedback:
+            return feedback, "คำแนะนำจาก Gemini"
+    except Exception:
+        pass
+    return fallback, "ข้อความสำรอง · Gemini ยังไม่พร้อมใช้งาน"
 
 
 def fresh_walk(state):
@@ -673,6 +707,17 @@ with action, st.container(border=True, key="battle-action"):
         st.caption(f"ระดับปัจจุบัน {state[level_key]}/{get_max_level(topic)}")
         if state.get("shield_used"):
             st.html(item_html("shield", "ใช้โล่แล้ว · อยู่ช่องเดิม"))
+        history = state[f"p{player}_history"]
+        if history:
+            feedback_key = (state["game_id"], role, len(history))
+            cached_key, result = st.session_state.get("answer_feedback", (None, None))
+            if cached_key != feedback_key:
+                with st.spinner("กำลังเตรียมคำแนะนำ"):
+                    result = get_ai_feedback(history[-1])
+                st.session_state.answer_feedback = (feedback_key, result)
+            feedback, source = result
+            st.caption(source)
+            st.info(feedback)
         if st.button("จบตา", type="primary", use_container_width=True):
             state["turn"] = other_role
             state["game_phase"] = "READY"
