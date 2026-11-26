@@ -6,6 +6,8 @@ import random
 import time
 import uuid
 from html import escape
+from pathlib import Path
+from threading import RLock
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
@@ -30,7 +32,8 @@ except ImportError:
     firestore = None
 
 
-APP_NAME = "Inequality Battle: ตะลุยโลกอสมการ"
+APP_NAME = "Inequality Battle"
+APP_SUBTITLE = "บอร์ดเกมตะลุยโลกอสมการแบบปรับเหมาะ"
 GEMINI_MODEL = "gemini-4-hydrogen"
 GEMINI_BACKUP_MODEL = "gemini-3.5-flash-lite"
 Q_DIR = "questions"
@@ -42,7 +45,7 @@ TOPICS = {
     "linear": "การแก้อสมการเชิงเส้นตัวแปรเดียว",
 }
 
-st.set_page_config(page_title=APP_NAME, page_icon="📝", layout="wide")
+st.set_page_config(page_title=f"{APP_NAME} | {APP_SUBTITLE}", page_icon="📝", layout="wide")
 st.html(game_style_html())
 
 
@@ -154,68 +157,159 @@ def ensure_room_metadata(state):
     return changed
 
 
-def get_db():
+@st.cache_resource
+def room_file_lock():
+    return RLock()
+
+
+def get_db(create=True):
     firestore_db = get_firestore_db()
     if firestore_db:
-        snapshot = firestore_db.collection("rooms").document(get_room_id()).get()
+        room = firestore_db.collection("rooms").document(get_room_id())
+        snapshot = room.get()
         if snapshot.exists:
             state = snapshot.to_dict()
             if ensure_room_metadata(state):
                 update_db(state, touch=False)
             return state
-        state = get_initial_state()
-        update_db(state)
-        return state
-    if not os.path.exists(get_db_file()):
-        state = get_initial_state()
-        update_db(state)
-        return state
-    try:
-        with open(get_db_file(), "r", encoding="utf-8") as file:
-            state = json.load(file)
+        if not create:
+            return None
+        @firestore.transactional
+        def open_room(transaction):
+            current = room.get(transaction=transaction)
+            if current.exists:
+                return current.to_dict()
+            state = get_initial_state()
+            transaction.set(room, state)
+            return state
+
+        return open_room(firestore_db.transaction())
+    with room_file_lock():
+        if not os.path.exists(get_db_file()):
+            if not create:
+                return None
+            state = get_initial_state()
+            update_db(state)
+            return state
+        try:
+            with open(get_db_file(), "r", encoding="utf-8") as file:
+                state = json.load(file)
+        except (OSError, ValueError):
+            if not create:
+                raise
+            return get_initial_state()
         if ensure_room_metadata(state):
             update_db(state, touch=False)
         return state
-    except Exception:
-        return get_initial_state()
 
 
 def update_db(state, touch=True):
     if touch:
         state["last_activity_at"] = time.time()
     firestore_db = get_firestore_db()
+    expected_id = st.session_state.get("game_id")
     if firestore_db:
-        firestore_db.collection("rooms").document(get_room_id()).set(state)
-        return
-    with open(get_db_file(), "w", encoding="utf-8") as file:
-        json.dump(state, file, ensure_ascii=False, indent=2)
+        room = firestore_db.collection("rooms").document(get_room_id())
+        if expected_id is None:
+            room.set(state)
+            return
 
+        @firestore.transactional
+        def write_player_state(transaction):
+            snapshot = room.get(transaction=transaction)
+            if not snapshot.exists or snapshot.to_dict().get("game_id") != expected_id:
+                return False
+            transaction.set(room, state)
+            return True
 
-def delete_db():
-    firestore_db = get_firestore_db()
-    if firestore_db:
-        firestore_db.collection("rooms").document(get_room_id()).delete()
+        if not write_player_state(firestore_db.transaction()):
+            st.rerun()
         return
-    if os.path.exists(get_db_file()):
-        os.remove(get_db_file())
+    with room_file_lock():
+        if expected_id is not None:
+            path = Path(get_db_file())
+            if not path.exists() or json.loads(path.read_text(encoding="utf-8")).get("game_id") != expected_id:
+                st.rerun()
+        with open(get_db_file(), "w", encoding="utf-8") as file:
+            json.dump(state, file, ensure_ascii=False, indent=2)
 
 
 def is_room_expired(state):
     return time.time() - state.get("last_activity_at", state.get("created_at", time.time())) >= ROOM_TIMEOUT_SECONDS
 
 
-def return_to_home(message):
+def return_to_home(message=None):
     for key in ["room_id", "player_name", "selected_topic", "my_role", "game_id"]:
         st.session_state.pop(key, None)
-    st.session_state.home_notice = message
+    if message:
+        st.session_state.home_notice = message
     st.rerun()
 
 
-def close_expired_room():
-    state = get_db()
-    save_room_results(state, "หมดเวลา", show_warning=False)
-    delete_db()
-    return_to_home("ห้องหมดเวลาแล้ว กรุณาเริ่มเกมใหม่")
+def summary_file(game_id):
+    return Path(f"game_state_summary_{uuid.UUID(game_id).hex}.json")
+
+
+def read_room_summary(game_id):
+    db = get_firestore_db()
+    if db:
+        snapshot = db.collection("room_summaries").document(game_id).get()
+        return snapshot.to_dict() if snapshot.exists else None
+    with room_file_lock():
+        path = summary_file(game_id)
+        return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def close_room_with_summary(game_id, expired_only=False):
+    def prepare(state):
+        if state["game_id"] != game_id or (expired_only and not is_room_expired(state)):
+            return None
+        if state.get("results_saving"):
+            return None
+        summary = {key: state[key] for key in (
+            "topic", "winner", "p1_name", "p2_name", "p1_history", "p2_history", "p1_saved", "p2_saved",
+        )}
+        summary["closed_at"] = time.time()
+        return summary
+
+    db = get_firestore_db()
+    if db:
+        room = db.collection("rooms").document(get_room_id())
+        archive = db.collection("room_summaries").document(game_id)
+
+        @firestore.transactional
+        def close(transaction):
+            snapshot = room.get(transaction=transaction)
+            summary = prepare(snapshot.to_dict()) if snapshot.exists else None
+            if summary is not None:
+                transaction.set(archive, summary)
+                transaction.delete(room)
+            return summary
+
+        summary = close(db.transaction())
+    else:
+        with room_file_lock():
+            current = get_db(create=False)
+            summary = prepare(current) if current else None
+            if summary is not None:
+                summary_file(game_id).write_text(json.dumps(summary, ensure_ascii=False), encoding="utf-8")
+                Path(get_db_file()).unlink()
+
+    if summary is None:
+        return None
+    status = "จบเกม" if summary["winner"] else "หมดเวลา"
+    for player in (1, 2):
+        role = f"Player {player}"
+        saved_key = f"p{player}_saved"
+        if summary["topic"] and not summary[saved_key] and summary[f"p{player}_name"] != role:
+            summary[saved_key] = save_to_gsheet(build_result_row(summary, role, status), show_warning=False)
+    saved = {key: summary[key] for key in ("p1_saved", "p2_saved")}
+    if db:
+        archive.update(saved)
+    else:
+        with room_file_lock():
+            summary_file(game_id).write_text(json.dumps(summary, ensure_ascii=False), encoding="utf-8")
+    return summary
 
 
 def reset_game(topic):
@@ -293,7 +387,7 @@ def claim_room_result_save(state, roles):
         if not snapshot.exists:
             return {"allowed": False}
         latest_state = snapshot.to_dict()
-        if latest_state.get("results_saving", False):
+        if latest_state.get("game_id") != state.get("game_id") or latest_state.get("results_saving", False):
             return {"allowed": False}
         needs_save = any(
             not latest_state.get("p1_saved" if role == "Player 1" else "p2_saved")
@@ -472,17 +566,59 @@ def render_choice(choice, index):
         return st.button(f"เลือกข้อ {index + 1}", key=f"answer_{index}", use_container_width=True)
 
 
+def render_score(history):
+    answered, correct, wrong = st.columns(3)
+    answered.metric("ตอบทั้งหมด", len(history))
+    correct.metric("ตอบถูก", sum(row["ผล"] == "ถูก" for row in history))
+    wrong.metric("ตอบผิด", sum(row["ผล"] == "ผิด" for row in history))
+
+
+def render_mistakes(history):
+    mistakes = [row for row in history if row["ผล"] == "ผิด"]
+    if mistakes:
+        st.subheader("ข้อที่ควรกลับไปทบทวน")
+        st.dataframe(mistakes, use_container_width=True, hide_index=True)
+    elif history:
+        st.success("คุณตอบถูกทุกข้อ")
+    else:
+        st.info("รอบนี้ยังไม่ได้ตอบโจทย์")
+
+
+def render_closed_summary(summary, role):
+    player = 1 if role == "Player 1" else 2
+    st.title("สรุปการเดินทาง")
+    if summary["winner"]:
+        winner = 1 if summary["winner"] == "Player 1" else 2
+        st.success(f"{summary[f'p{winner}_name']} ถึงแคมป์แล้ว")
+    else:
+        st.info("หมดเวลาเล่น")
+    st.caption(f"ห้อง {st.session_state.room_id} · {summary[f'p{player}_name']}")
+    history = summary[f"p{player}_history"]
+    render_score(history)
+    render_mistakes(history)
+    if st.button("กลับหน้าแรก", type="primary"):
+        return_to_home()
+    st.stop()
+
+
+@st.fragment(run_every=3)
+def monitor_active_room(game_id):
+    latest = get_db(create=False)
+    if not latest or latest["game_id"] != game_id or is_room_expired(latest):
+        st.rerun()
+
+
 @st.fragment(run_every=3)
 def render_waiting_panel(role):
-    latest_state = get_db()
+    latest_state = get_db(create=False)
     if (
-        latest_state.get("turn") == role
+        not latest_state
+        or latest_state.get("turn") == role
         or latest_state.get("winner")
         or latest_state.get("game_id") != st.session_state.get("game_id")
+        or is_room_expired(latest_state)
     ):
         st.rerun()
-    if is_room_expired(latest_state):
-        close_expired_room()
     waiting_name = latest_state["p1_name" if role == "Player 2" else "p2_name"]
     board_column, waiting_column = st.columns([2, 1])
     board_column.html(game_board_html(latest_state, MYSTERY_SPOTS, fresh_walk(latest_state)))
@@ -492,7 +628,7 @@ def render_waiting_panel(role):
 
 
 if "room_id" not in st.session_state:
-    st.html(hero_html())
+    st.html(hero_html(APP_NAME, APP_SUBTITLE))
     if "home_notice" in st.session_state:
         st.warning(st.session_state.pop("home_notice"))
     with st.container(border=True, key="battle-lobby"):
@@ -519,10 +655,8 @@ if "room_id" not in st.session_state:
 if "my_role" not in st.session_state:
     state = get_db()
     if is_room_expired(state):
-        save_room_results(state, "หมดเวลา", show_warning=False)
-        delete_db()
-        state = get_initial_state()
-        update_db(state)
+        close_room_with_summary(state["game_id"], expired_only=True)
+        state = get_db()
     selected_topic = st.session_state.selected_topic
     st.html(
         f'<header class="battle-room"><h2>ห้อง {escape(st.session_state.room_id)}</h2>'
@@ -559,12 +693,25 @@ if "my_role" not in st.session_state:
     st.stop()
 
 
-state = get_db()
-if is_room_expired(state):
-    close_expired_room()
-if st.session_state.get("game_id") != state.get("game_id"):
-    return_to_home("ห้องรอบเดิมถูกปิดแล้ว กรุณาเข้าห้องใหม่")
 role = st.session_state.my_role
+game_id = st.session_state.game_id
+state = get_db(create=False)
+if not state or game_id != state.get("game_id"):
+    summary = read_room_summary(game_id)
+    if summary is not None:
+        render_closed_summary(summary, role)
+    return_to_home("ห้องรอบเดิมถูกปิดแล้ว กรุณาเข้าห้องใหม่")
+if not state.get("winner") and is_room_expired(state):
+    summary = close_room_with_summary(game_id, expired_only=True)
+    if summary is not None:
+        render_closed_summary(summary, role)
+    latest = get_db(create=False)
+    if not latest or latest["game_id"] != game_id or not is_room_expired(latest):
+        st.rerun()
+    st.info("ห้องหมดเวลาแล้ว กำลังรอบันทึกผล")
+    if st.button("ตรวจผลอีกครั้ง"):
+        st.rerun()
+    st.stop()
 topic = state["topic"]
 other_role = "Player 2" if role == "Player 1" else "Player 1"
 p1_name = state.get("p1_name", "Player 1")
@@ -578,7 +725,8 @@ if state.get("p1_reset_req") and state.get("p2_reset_req"):
     st.rerun()
 
 st.html(
-    '<header class="battle-room"><h1>Inequality Battle</h1>'
+    f'<header class="battle-room"><h1>{APP_NAME}</h1>'
+    f'<p>{APP_SUBTITLE}</p>'
     f'<p>ห้อง {escape(st.session_state.room_id)} · {escape(TOPICS[topic])}</p></header>'
 )
 
@@ -594,18 +742,11 @@ if state.get("winner"):
         save_room_results(state, "จบเกม", roles=[role])
     with finish_summary:
         st.subheader("สรุปการเดินทาง")
-        answered, correct = st.columns(2)
-        answered.metric("ตอบทั้งหมด", len(history))
-        correct.metric("ตอบถูก", sum(row["ผล"] == "ถูก" for row in history))
-    mistakes = [row for row in history if row["ผล"] == "ผิด"]
-    if mistakes:
-        st.subheader("ข้อที่ควรกลับไปทบทวน")
-        st.dataframe(mistakes, use_container_width=True)
-    elif history:
-        st.success("คุณตอบถูกทุกข้อ")
-    if st.button("เริ่มเกมใหม่"):
-        reset_game(topic)
-        st.rerun()
+        render_score(history)
+    render_mistakes(history)
+    if st.button("กลับหน้าแรก", type="primary"):
+        close_room_with_summary(game_id)
+        return_to_home()
     st.stop()
 
 header_main, header_refresh, header_reset, header_timeout = st.columns([3, 1, 1, 1])
@@ -632,17 +773,25 @@ with header_reset:
         update_db(state)
         st.rerun()
 with header_timeout:
-    if st.button("หมดเวลา", help="บันทึกผลของทั้งสองคน ปิดห้อง และกลับหน้าแรก", use_container_width=True):
-        if save_room_results(state, "หมดเวลา"):
-            delete_db()
-            return_to_home("บันทึกผลและปิดห้องแล้ว รหัสห้องนี้พร้อมใช้สำหรับเกมใหม่")
-        st.error("ยังปิดห้องไม่ได้ เพราะบันทึกผลไม่สำเร็จ กรุณาตรวจการตั้งค่า Google Sheets")
+    if st.button("หมดเวลา", help="ปิดห้องและแสดงสรุปผลของผู้เล่นทั้งสองคน", use_container_width=True):
+        close_room_with_summary(game_id)
+        st.rerun()
 
 if state["turn"] != role:
     render_waiting_panel(role)
     st.stop()
 
+monitor_active_room(game_id)
 phase = state.get("game_phase", "READY")
+if phase == "ROLLED":
+    question, choices = get_q_and_choices(topic, state[level_key])
+    if not question:
+        st.error("ไม่พบโจทย์สำหรับเนื้อหาและระดับนี้")
+        st.stop()
+    state.update(current_q=question, current_choices=choices, game_phase="ANSWERING")
+    update_db(state)
+    st.rerun()
+
 with st.container(key="battle-question-layout" if phase == "ANSWERING" else "battle-play-layout"):
     board, action = st.columns([2, 1])
 move = fresh_walk(state)
@@ -654,8 +803,14 @@ with action, st.container(border=True, key="battle-action"):
         if st.button("ทอยลูกเต๋า", type="primary", use_container_width=True):
             roll = random.randint(1, 6)
             position_key = "p1_pos" if role == "Player 1" else "p2_pos"
+            destination = min(state[position_key] + roll, 63)
+            if destination != 63:
+                question, choices = get_q_and_choices(topic, state[level_key])
+                if not question:
+                    st.error("ไม่พบโจทย์สำหรับเนื้อหาและระดับนี้")
+                    st.stop()
             state["old_pos"] = state[position_key]
-            state[position_key] = min(state[position_key] + roll, 63)
+            state[position_key] = destination
             state["trail_move"] = {
                 "id": uuid.uuid4().hex, "at": time.time(),
                 "player": player, "from": state["old_pos"], "to": state[position_key],
@@ -669,11 +824,11 @@ with action, st.container(border=True, key="battle-action"):
             if state[position_key] == 63:
                 state["winner"] = role
             else:
-                state["game_phase"] = "ROLLED"
+                state.update(current_q=question, current_choices=choices, game_phase="ANSWERING")
             update_db(state)
             st.rerun()
 
-    elif phase == "ROLLED":
+    elif phase == "ANSWERING":
         roll = state["last_roll"]
         animation = " battle-roll-fresh" if move else ""
         st.html(f'<div class="battle-roll{animation}"><strong aria-hidden="true">{chr(0x2680 + roll - 1)}</strong>'
@@ -685,19 +840,6 @@ with action, st.container(border=True, key="battle-action"):
             if move:
                 reward = f'<div class="battle-reward-fresh" style="--walk-duration:{walk_duration(move)}ms">{reward}</div>'
             st.html(reward)
-        if st.button("เปิดโจทย์", type="primary", use_container_width=True):
-            level_key = "p1_level" if role == "Player 1" else "p2_level"
-            question, choices = get_q_and_choices(topic, state[level_key])
-            if not question:
-                st.error("ไม่พบโจทย์สำหรับเนื้อหาและระดับนี้")
-            else:
-                state["current_q"] = question
-                state["current_choices"] = choices
-                state["game_phase"] = "ANSWERING"
-                update_db(state)
-                st.rerun()
-
-    elif phase == "ANSWERING":
         question = state["current_q"]
         st.markdown("### โจทย์")
         render_formula(question.get("text"), question.get("latex"))
