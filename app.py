@@ -6,16 +6,13 @@ import random
 import time
 import uuid
 from html import escape
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 import streamlit as st
 
 from addition_board import PLAYER_ANIMALS, game_board_html, game_style_html, hero_html, item_html, pawn_html, walk_duration
-
-try:
-    from google import genai
-except ImportError:
-    genai = None
 
 try:
     import gspread
@@ -349,12 +346,9 @@ def save_room_results(state, status, roles=None, show_warning=True):
 
 def get_ai_feedback(answer_record):
     fallback = "ลองตรวจอีกครั้งว่าต้องทำอะไรกับอสมการทั้งสองข้าง และควรกลับเครื่องหมายหรือไม่"
-    if genai is None:
-        logging.warning("Gemini feedback unavailable: google-genai could not be imported")
-        return fallback, "ข้อความสำรอง · แอพยังเรียก Gemini ไม่ได้"
     try:
         api_key = st.secrets.get("GENAI_API_KEY")
-        if not api_key:
+        if not isinstance(api_key, str) or not api_key.strip():
             return fallback, "ข้อความสำรอง · ยังไม่ได้ตั้งค่า Gemini"
         prompt = (
             f"โจทย์: {answer_record['โจทย์']}\n"
@@ -364,32 +358,44 @@ def get_ai_feedback(answer_record):
             "ชี้จุดที่ควรตรวจจากโจทย์และคำตอบที่เลือก โดยยึดเฉลยที่ให้มา "
             "ใช้ข้อความธรรมดาและไม่ต้องแจกแจงวิธีทำเต็มข้อ"
         )
-        with genai.Client(
-            api_key=api_key,
-            http_options={"timeout": 15000, "retry_options": {"attempts": 1}},
-        ) as client:
-            response = client.models.generate_content(
-                model=GEMINI_MODEL,
-                contents=prompt,
-                config={"thinking_config": {"thinking_level": "LOW"}},
-            )
-            feedback = (response.text or "").strip()
+        request = Request(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
+            data=json.dumps({
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"thinkingConfig": {"thinkingLevel": "LOW"}},
+            }).encode("utf-8"),
+            headers={"Content-Type": "application/json", "x-goog-api-key": api_key.strip()},
+            method="POST",
+        )
+        with urlopen(request, timeout=18) as response:
+            data = json.load(response)
+        candidates = data.get("candidates") or []
+        parts = candidates[0].get("content", {}).get("parts", []) if candidates else []
+        feedback = "".join(part.get("text", "") for part in parts if not part.get("thought")).strip()
         if feedback:
-            return feedback, "คำแนะนำจาก Gemini"
+            return feedback, f"คำแนะนำจาก Gemini · {GEMINI_MODEL}"
         logging.warning("Gemini feedback empty: model=%s", GEMINI_MODEL)
-        return fallback, "ข้อความสำรอง · Gemini ไม่ส่งคำแนะนำกลับมา"
-    except Exception as error:
-        code = getattr(error, "code", None)
-        code = code if isinstance(code, int) else None
-        logging.warning("Gemini feedback failed: model=%s error=%s code=%s",
-                        GEMINI_MODEL, type(error).__name__, code)
+        reason = "Gemini ตอบกลับโดยไม่มีข้อความ"
+    except HTTPError as error:
+        logging.warning("Gemini feedback failed: model=%s HTTP %s", GEMINI_MODEL, error.code)
         reason = {
+            400: "Google ปฏิเสธคำขอ ลองตรวจการตั้งค่า API key",
             401: "ยืนยัน API key ไม่สำเร็จ",
             403: "โปรเจกต์ไม่มีสิทธิ์เรียก Gemini",
             404: "โปรเจกต์นี้เรียกโมเดลที่ตั้งไว้ไม่ได้",
             429: "Gemini ถึงขีดจำกัดการเรียกชั่วคราว",
-        }.get(code, "Gemini ยังไม่พร้อมใช้งาน")
-        return fallback, f"ข้อความสำรอง · {reason}"
+            503: "บริการ Gemini ไม่พร้อมใช้งานชั่วคราว",
+        }.get(error.code, "Google ตอบกลับด้วยข้อผิดพลาด")
+        reason = f"{reason} (HTTP {error.code})"
+        error.close()
+    except (TimeoutError, URLError) as error:
+        timed_out = isinstance(error, TimeoutError) or isinstance(getattr(error, "reason", None), TimeoutError)
+        reason = "รอ Gemini เกินเวลาที่กำหนด" if timed_out else "เชื่อมต่อ Gemini ไม่สำเร็จ"
+        logging.warning("Gemini connection failed: model=%s timeout=%s", GEMINI_MODEL, timed_out)
+    except Exception as error:
+        logging.warning("Gemini feedback failed: model=%s error=%s", GEMINI_MODEL, type(error).__name__)
+        reason = "อ่านการตั้งค่าหรือผลตอบกลับจาก Gemini ไม่สำเร็จ"
+    return fallback, f"ข้อความสำรอง · {reason} · {GEMINI_MODEL}"
 
 
 def fresh_walk(state):
@@ -727,7 +733,7 @@ with action, st.container(border=True, key="battle-action"):
             st.html(item_html("shield", "ใช้โล่แล้ว · อยู่ช่องเดิม"))
         history = state[f"p{player}_history"]
         if history:
-            feedback_key = (state["game_id"], role, len(history))
+            feedback_key = ("gemini-rest", state["game_id"], role, len(history))
             cached_key, result = st.session_state.get("answer_feedback", (None, None))
             if cached_key != feedback_key:
                 with st.spinner("กำลังเตรียมคำแนะนำ"):
